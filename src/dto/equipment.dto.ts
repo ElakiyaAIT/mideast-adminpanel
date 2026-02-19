@@ -56,7 +56,7 @@ export interface CreateEquipmentCategoryDto {
   slug: string;
   parentId?: string;
   description: string;
-  imageUrl?: string;
+  imageUrl?: string|null;
   attributeTemplate?: Record<string, unknown>;
   isActive?: boolean;
   sortOrder?: number;
@@ -67,7 +67,7 @@ export interface UpdateEquipmentCategoryDto {
   slug?: string;
   parentId?: string;
   description?: string;
-  imageUrl?: string;
+  imageUrl?: string|null;
   attributeTemplate?: Record<string, unknown>;
   isActive?: boolean;
   sortOrder?: number;

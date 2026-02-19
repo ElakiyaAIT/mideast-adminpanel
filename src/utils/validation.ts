@@ -329,7 +329,9 @@ export const createCategorySchema = yup.object({
     .max(100, 'Slug must not exceed 100 characters')
     .matches(/^[a-z0-9]+(?:-[a-z0-9]+)*$/, 'Slug must be lowercase with hyphens only')
     .trim(),
-  description: yup.string().max(500, 'Description must not exceed 500 characters').trim(),
+  description: yup.string()
+  .required('Description is required')
+  .max(500, 'Description must not exceed 500 characters').trim(),
   isActive: yup.boolean().default(true),
 });
 

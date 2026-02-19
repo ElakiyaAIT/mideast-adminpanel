@@ -40,6 +40,8 @@ const EquipmentCategoriesPage = (): JSX.Element => {
   const [page, setPage] = useState(1);
   const [limit] = useState(10);
   const [searchTerm, setSearchTerm] = useState('');
+  const [isImageRemoved, setIsImageRemoved] = useState(false);
+
 
   // Modal states
   const [isFormModalOpen, setIsFormModalOpen] = useState(false);
@@ -107,6 +109,7 @@ const [isUploading, setIsUploading] = useState(false);
   const handleAddCategory = (): void => {
     setIsEditMode(false);
     setSelectedCategory(null);
+    setIsImageRemoved(false)
     reset({
       name: '',
       slug: '',
@@ -119,6 +122,7 @@ const [isUploading, setIsUploading] = useState(false);
   const handleEditCategory = (category: EquipmentCategoryDto): void => {
     setIsEditMode(true);
     setSelectedCategory(category);
+    setIsImageRemoved(false)
     reset({
       name: category.name,
       slug: category.slug,
@@ -143,20 +147,24 @@ const [isUploading, setIsUploading] = useState(false);
 const handleRemoveImage = (): void => {
   setExistingImage(null);
     setImageFile(null);
+      setIsImageRemoved(true);
+
 
 };
 
 
   const onSubmit = async (data: CreateCategoryFormData): Promise<void> => {
     
-        let imageUrl = existingImage ?? undefined;
+      let imageUrl: string | null | undefined = undefined;
 
-        if (imageFile) {
-    setIsUploading(true);
-    const response = await equipmentCategoryApi.uploadCategoryImage(imageFile);
-    imageUrl = response.data.urls[0];
-    setIsUploading(false);
-  }
+if (imageFile) {
+  setIsUploading(true);
+  const response = await equipmentCategoryApi.uploadCategoryImage(imageFile);
+  imageUrl = response.data.urls[0];
+  setIsUploading(false);
+} else if (isImageRemoved) {
+  imageUrl = null;
+}
 
 
     if (isEditMode && selectedCategory) {
@@ -219,6 +227,7 @@ const resetFormState = (): void => {
   setExistingImage(null);
   setIsEditMode(false);
   setSelectedCategory(null);
+  setIsImageRemoved(false);
 };
 
     return (
@@ -399,7 +408,7 @@ const resetFormState = (): void => {
 
           <div>
             <label className="mb-2 block text-sm font-medium text-gray-700 dark:text-gray-300">
-              Description
+              Description  <span className="ml-1 text-red-500">*</span>
             </label>
             <textarea
               placeholder="Enter category description"
@@ -407,9 +416,9 @@ const resetFormState = (): void => {
               className="w-full rounded-lg border border-gray-300 p-2 dark:border-gray-600 dark:bg-gray-800"
               rows={3}
             />
-            {errors.description && (
+            {errors?.description && (
               <p className="mt-1 text-sm text-red-600 dark:text-red-400">
-                {errors.description.message}
+                {errors.description?.message}
               </p>
             )}
           </div>
