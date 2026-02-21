@@ -30,7 +30,6 @@ export const useEquipmentCategories = (
     queryKey: ['equipment-categories', params],
     queryFn: async () => {
       const response = await equipmentCategoryApi.getCategories(params);
-
       return response;
     },
   });
@@ -93,7 +92,7 @@ export const useDeleteEquipmentCategory = () => {
     mutationFn: (id: string) => equipmentCategoryApi.deleteCategory(id),
     onSuccess: () => {
       void queryClient.invalidateQueries({ queryKey: ['equipment-categories'] });
-      console.log('Category deleted successfully');
+      // console.log('Category deleted successfully');
     },
     onError: (error: Error) => {
       console.error(error.message || 'Failed to delete category');
@@ -111,7 +110,7 @@ export const useRestoreEquipmentCategory = () => {
     mutationFn: (id: string) => equipmentCategoryApi.restoreCategory(id),
     onSuccess: () => {
       void queryClient.invalidateQueries({ queryKey: ['equipment-categories'] });
-      console.log('Category restored successfully');
+      // console.log('Category restored successfully');
     },
     onError: (error: Error) => {
       console.error(error.message || 'Failed to restore category');
@@ -214,7 +213,7 @@ export const useApproveEquipment = () => {
       void queryClient.invalidateQueries({ queryKey: ['equipment'] });
       void queryClient.invalidateQueries({ queryKey: ['equipment', variables.id] });
       void queryClient.invalidateQueries({ queryKey: ['equipment', 'pending-approvals'] });
-      console.log('Equipment approved successfully');
+      // console.log('Equipment approved successfully');
     },
     onError: (error: Error) => {
       console.error(error.message || 'Failed to approve equipment');
@@ -235,7 +234,7 @@ export const useRejectEquipment = () => {
       void queryClient.invalidateQueries({ queryKey: ['equipment'] });
       void queryClient.invalidateQueries({ queryKey: ['equipment', variables.id] });
       void queryClient.invalidateQueries({ queryKey: ['equipment', 'pending-approvals'] });
-      console.log('Equipment rejected successfully');
+      // console.log('Equipment rejected successfully');
     },
     onError: (error: Error) => {
       console.error(error.message || 'Failed to reject equipment');
@@ -254,7 +253,7 @@ export const useBulkApproveEquipment = () => {
     onSuccess: () => {
       void queryClient.invalidateQueries({ queryKey: ['equipment'] });
       void queryClient.invalidateQueries({ queryKey: ['equipment', 'pending-approvals'] });
-      console.log('Equipment bulk approved successfully');
+      // console.log('Equipment bulk approved successfully');
     },
     onError: (error: Error) => {
       console.error(error.message || 'Failed to bulk approve equipment');
@@ -272,7 +271,7 @@ export const useDeleteEquipment = () => {
     mutationFn: (id: string) => equipmentApi.deleteEquipment(id),
     onSuccess: () => {
       void queryClient.invalidateQueries({ queryKey: ['equipment'] });
-      console.log('Equipment deleted successfully');
+      // console.log('Equipment deleted successfully');
     },
     onError: (error: Error) => {
       console.error(error.message || 'Failed to delete equipment');

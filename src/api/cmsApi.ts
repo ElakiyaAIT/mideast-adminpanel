@@ -56,6 +56,21 @@ export const bannerApi = {
     const response = await axiosInstance.delete<ApiResponse<void>>(`/admin/cms/banners/${id}`);
     return response.data;
   },
+
+  //UPLOAD IMAGE
+  uploadImage: async (file: File): Promise<{ data: { url: string } }> => {
+    const formData = new FormData();
+
+    formData.append('image', file); // MUST match FileInterceptor('image')
+
+    const response = await axiosInstance.post('/admin/upload/banner-image', formData, {
+      headers: {
+        'Content-Type': 'multipart/form-data',
+      },
+    });
+
+    return response.data;
+  },
 };
 
 // ============================================

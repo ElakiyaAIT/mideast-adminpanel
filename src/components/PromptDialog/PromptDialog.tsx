@@ -13,6 +13,7 @@ interface PromptDialogProps {
   cancelText?: string;
   isLoading?: boolean;
   multiline?: boolean;
+  minlength?: number;
 }
 
 export const PromptDialog = ({
@@ -26,11 +27,20 @@ export const PromptDialog = ({
   cancelText = 'Cancel',
   isLoading = false,
   multiline = false,
+  minlength,
 }: PromptDialogProps): JSX.Element => {
   const [value, setValue] = useState('');
+  const [error, setError] = useState('');
 
   const handleSubmit = (e: FormEvent): void => {
     e.preventDefault();
+
+    const trimmed = value.trim();
+    if (minlength && trimmed.length < minlength) {
+      setError(`Enter atleast ${minlength} characters`);
+      return;
+    }
+
     if (value.trim()) {
       onSubmit(value);
       setValue('');
@@ -72,6 +82,7 @@ export const PromptDialog = ({
                 autoFocus
               />
             )}
+            {error && <p className="text-sm text-red-500">{error}</p>}
           </div>
         </div>
 

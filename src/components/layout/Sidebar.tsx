@@ -18,7 +18,7 @@ import {
   Bell,
   FolderTree,
   CheckSquare,
-  MessageSquareQuote ,
+  MessageSquareQuote,
 } from 'lucide-react';
 import { useState, type JSX } from 'react';
 import { ROUTES } from '../../constants';
@@ -42,7 +42,7 @@ const navigation = [
   { name: 'Analytics', href: ROUTES.ANALYTICS, icon: BarChart3 },
   { name: 'Reports', href: ROUTES.REPORTS, icon: FileText },
   { name: 'Profile', href: ROUTES.PROFILE, icon: User },
-  {name: 'Testimonials',href: ROUTES.TESTIMONIAL, icon: MessageSquareQuote},
+  { name: 'Testimonials', href: ROUTES.TESTIMONIAL, icon: MessageSquareQuote },
 ];
 
 export const Sidebar = (): JSX.Element => {
@@ -75,7 +75,7 @@ export const Sidebar = (): JSX.Element => {
 
           {/* Navigation */}
           <nav
-            className="scrollbar-thin flex-1 min-h-0 space-y-2 overflow-y-auto px-4 py-6"
+            className="scrollbar-thin min-h-0 flex-1 space-y-2 overflow-y-auto px-4 py-6"
             aria-label="Main navigation"
           >
             {navigation.map((item) => {
@@ -167,7 +167,7 @@ export const Sidebar = (): JSX.Element => {
               aria-hidden="true"
             />
             <aside
-              className="glass-strong fixed inset-y-0 left-0 z-40 w-72 h-full animate-slide-in-left border-r border-white/30 shadow-frost-lg dark:border-white/10"
+              className="glass-strong fixed inset-y-0 left-0 z-40 h-full w-72 animate-slide-in-left border-r border-white/30 shadow-frost-lg dark:border-white/10"
               aria-label="Mobile sidebar navigation"
             >
               <div className="flex h-full flex-col">
@@ -195,7 +195,7 @@ export const Sidebar = (): JSX.Element => {
 
                 {/* Mobile Navigation */}
                 <nav
-                  className="flex-1 space-y-1 min-h-0 overflow-y-auto px-4 py-6"
+                  className="min-h-0 flex-1 space-y-1 overflow-y-auto px-4 py-6"
                   aria-label="Main navigation"
                 >
                   {navigation.map((item) => {

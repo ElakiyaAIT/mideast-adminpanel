@@ -16,6 +16,7 @@ import {
   Input,
   Select,
   ConfirmDialog,
+  ImageUpload,
 } from '../../components';
 import { Plus, Edit, Trash2, RefreshCw, Image } from 'lucide-react';
 import { useBanners, useCreateBanner, useUpdateBanner, useDeleteBanner } from '../../hooks/queries';
@@ -23,6 +24,7 @@ import type { BannerDto, CreateBannerDto, UpdateBannerDto } from '../../dto';
 import type { BannerStatus } from '../../dto';
 import { BannerPositionType, BannerStatusType } from '../../dto';
 import { bannerSchema, type BannerFormData } from '../../utils/validation';
+import { bannerApi } from '../../api/cmsApi';
 
 const BannersPage = (): JSX.Element => {
   const [isFormModalOpen, setIsFormModalOpen] = useState(false);
@@ -30,6 +32,9 @@ const BannersPage = (): JSX.Element => {
   const [isEditMode, setIsEditMode] = useState(false);
   const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false);
   const [bannerToDelete, setBannerToDelete] = useState<string | null>(null);
+  const [imageFile, setImageFile] = useState<File | null>(null);
+  const [existingImage, setExistingImage] = useState<string | null>(null);
+  const [isUploading, setIsUploading] = useState(false);
 
   const { data, isLoading, isFetching, refetch } = useBanners();
   const createMutation = useCreateBanner();
@@ -41,6 +46,8 @@ const BannersPage = (): JSX.Element => {
     handleSubmit,
     control,
     reset,
+    setError,
+    clearErrors,
     formState: { errors },
   } = useForm({
     resolver: yupResolver(bannerSchema),
@@ -60,12 +67,14 @@ const BannersPage = (): JSX.Element => {
     setSelectedBanner(null);
     reset({
       title: '',
-      imageUrl: '',
+      // imageUrl: '',
       linkUrl: null,
       position: BannerPositionType.HOME_HERO,
       status: BannerStatusType.ACTIVE,
       sortOrder: 1,
     });
+    setExistingImage(null);
+    setImageFile(null);
     setIsFormModalOpen(true);
   };
 
@@ -74,13 +83,23 @@ const BannersPage = (): JSX.Element => {
     setSelectedBanner(banner);
     reset({
       title: banner.title,
-      imageUrl: banner.imageUrl,
+      // imageUrl: banner.imageUrl,
       linkUrl: banner.linkUrl || null,
       position: banner.position,
       status: banner.status,
       sortOrder: banner.sortOrder,
     });
+    setExistingImage(banner.imageUrl);
+    setImageFile(null);
     setIsFormModalOpen(true);
+  };
+
+  const handleImageChange = (files: File[]): void => {
+    setImageFile(files[0] || null);
+  };
+
+  const handleRemoveImage = (): void => {
+    setExistingImage(null);
   };
 
   const handleDelete = (id: string): void => {
@@ -95,13 +114,45 @@ const BannersPage = (): JSX.Element => {
     }
   };
 
-  const onSubmit = async (data: BannerFormData): Promise<void> => {
-    if (isEditMode && selectedBanner) {
-      const updateData: UpdateBannerDto = data;
-      await updateMutation.mutateAsync({ id: selectedBanner._id, data: updateData });
-    } else {
-      await createMutation.mutateAsync(data as CreateBannerDto);
+  const onSubmit = async (formData: BannerFormData): Promise<void> => {
+    let imageUrl: string | null = existingImage ?? null;
+
+    if (!imageFile && !existingImage) {
+      setError('imageUrl', {
+        type: 'manual',
+        message: 'Banner image is required',
+      });
+      return;
     }
+
+    clearErrors('imageUrl');
+
+    if (imageFile) {
+      setIsUploading(true);
+      const uploadRes = await bannerApi.uploadImage(imageFile);
+      imageUrl = uploadRes.data.url;
+      setIsUploading(false);
+    }
+
+    if (isEditMode && selectedBanner) {
+      const updateData: UpdateBannerDto = {
+        ...formData,
+        imageUrl,
+      };
+
+      await updateMutation.mutateAsync({
+        id: selectedBanner._id,
+        data: updateData,
+      });
+    } else {
+      const createData: CreateBannerDto = {
+        ...formData,
+        imageUrl,
+      };
+
+      await createMutation.mutateAsync(createData);
+    }
+
     setIsFormModalOpen(false);
   };
 
@@ -182,7 +233,15 @@ const BannersPage = (): JSX.Element => {
                   <TableCell>
                     <div className="flex items-center gap-3">
                       <div className="flex h-10 w-10 items-center justify-center rounded-xl border">
-                        <Image className="h-5 w-5 text-primary-600" />
+                        {banner?.imageUrl ? (
+                          <img
+                            src={banner.imageUrl}
+                            alt={banner.title}
+                            className="h-10 w-10 rounded-xl object-cover"
+                          />
+                        ) : (
+                          <Image className="h-5 w-5 text-primary-600" />
+                        )}
                       </div>
                       <div>
                         <p className="font-semibold text-gray-900 dark:text-white">
@@ -232,12 +291,23 @@ const BannersPage = (): JSX.Element => {
         title={isEditMode ? 'Edit Banner' : 'Add Banner'}
       >
         <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
-          <Input label="Title" type="text" {...register('title')} error={errors.title?.message} />
           <Input
-            label="Image URL"
+            label="Title"
             type="text"
-            {...register('imageUrl')}
-            error={errors.imageUrl?.message}
+            {...register('title')}
+            error={errors.title?.message}
+            required
+          />
+          <ImageUpload
+            label="Banner Image"
+            maxFiles={1}
+            value={existingImage ? [existingImage] : []}
+            onChange={handleImageChange}
+            onRemove={handleRemoveImage}
+            disabled={isUploading}
+            helperText="Upload banner image"
+            required
+            error={errors?.imageUrl?.message}
           />
           <Input
             label="Link URL"
@@ -267,6 +337,9 @@ const BannersPage = (): JSX.Element => {
               <Select
                 label="Status"
                 {...field}
+                required
+                value={field.value}
+                onChange={(value) => field.onChange(value)}
                 error={errors.status?.message}
                 options={Object.values(BannerStatusType).map((status) => ({
                   value: status,
@@ -285,9 +358,11 @@ const BannersPage = (): JSX.Element => {
             <Button
               type="submit"
               variant="primary"
-              disabled={createMutation.isPending || updateMutation.isPending}
+              disabled={createMutation.isPending || updateMutation.isPending || isUploading}
             >
-              {createMutation.isPending || updateMutation.isPending ? 'Saving...' : 'Save'}
+              {createMutation.isPending || updateMutation.isPending || isUploading
+                ? 'Saving...'
+                : 'Save'}
             </Button>
             <Button type="button" variant="outline" onClick={() => setIsFormModalOpen(false)}>
               Cancel

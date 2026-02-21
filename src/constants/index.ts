@@ -32,7 +32,7 @@ export const ROUTES = {
   SYSTEM_SETTINGS: '/system/settings',
   AUDIT_LOGS: '/system/audit-logs',
   //Testimonial routes
-  TESTIMONIAL:'/testimonials',
+  TESTIMONIAL: '/testimonials',
   // Public routes
   BUY: '/buy',
   SELL: '/sell',

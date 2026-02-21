@@ -116,7 +116,7 @@ export const useHoldPayout = () => {
     onSuccess: (_data, variables) => {
       void queryClient.invalidateQueries({ queryKey: ['payouts'] });
       void queryClient.invalidateQueries({ queryKey: ['payout', variables.id] });
-      console.log('Payout held successfully');
+      // console.log('Payout held successfully');
     },
     onError: (error: Error) => {
       console.error('Failed to hold payout:', error);

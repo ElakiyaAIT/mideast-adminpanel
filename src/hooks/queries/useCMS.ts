@@ -45,7 +45,7 @@ export const useCreateBanner = () => {
     mutationFn: (data: CreateBannerDto) => bannerApi.createBanner(data),
     onSuccess: () => {
       void queryClient.invalidateQueries({ queryKey: ['banners'] });
-      console.log('Banner created successfully');
+      // console.log('Banner created successfully');
     },
     onError: (error: Error) => {
       console.error(error.message || 'Failed to create banner');
@@ -65,7 +65,7 @@ export const useUpdateBanner = () => {
     onSuccess: (_data, variables) => {
       void queryClient.invalidateQueries({ queryKey: ['banners'] });
       void queryClient.invalidateQueries({ queryKey: ['banner', variables.id] });
-      console.log('Banner updated successfully');
+      // console.log('Banner updated successfully');
     },
     onError: (error: Error) => {
       console.error(error.message || 'Failed to update banner');
@@ -83,7 +83,7 @@ export const useDeleteBanner = () => {
     mutationFn: (id: string) => bannerApi.deleteBanner(id),
     onSuccess: () => {
       void queryClient.invalidateQueries({ queryKey: ['banners'] });
-      console.log('Banner deleted successfully');
+      // console.log('Banner deleted successfully');
     },
     onError: (error: Error) => {
       console.error(error.message || 'Failed to delete banner');
@@ -126,7 +126,7 @@ export const useCreateStaticPage = () => {
     mutationFn: (data: CreateStaticPageDto) => staticPageApi.createPage(data),
     onSuccess: () => {
       void queryClient.invalidateQueries({ queryKey: ['static-pages'] });
-      console.log('Page created successfully');
+      // console.log('Page created successfully');
     },
     onError: (error: Error) => {
       console.error(error.message || 'Failed to create page');
@@ -146,7 +146,7 @@ export const useUpdateStaticPage = () => {
     onSuccess: (_data, variables) => {
       void queryClient.invalidateQueries({ queryKey: ['static-pages'] });
       void queryClient.invalidateQueries({ queryKey: ['static-page', variables.slug] });
-      console.log('Page updated successfully');
+      // console.log('Page updated successfully');
     },
     onError: (error: Error) => {
       console.error(error.message || 'Failed to update page');
@@ -164,7 +164,7 @@ export const useDeleteStaticPage = () => {
     mutationFn: (slug: string) => staticPageApi.deletePage(slug),
     onSuccess: () => {
       void queryClient.invalidateQueries({ queryKey: ['static-pages'] });
-      console.log('Page deleted successfully');
+      // console.log('Page deleted successfully');
     },
     onError: (error: Error) => {
       console.error(error.message || 'Failed to delete page');

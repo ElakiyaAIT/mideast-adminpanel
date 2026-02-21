@@ -8,13 +8,12 @@ import {
   TableHead,
   TableCell,
   Button,
-  Input,
   Skeleton,
   Pagination,
   ConfirmDialog,
 } from '../../components';
-import { Search, RefreshCw, MessageSquareQuote, Plus, Edit, Trash2 } from 'lucide-react';
-import { useDebounce } from '../../hooks/useDebounce';
+import { MessageSquareQuote, Plus, Edit, Trash2 } from 'lucide-react';
+// import { useDebounce } from '../../hooks/useDebounce';
 
 // import TestimonialFormModal from './components/TestimonialFormModal';
 import type { TestimonialDto, FilterTestimonialDto } from '../../dto/testimonial.dto';
@@ -24,7 +23,7 @@ import TestimonialFormModal from './components/TestimonialFormModal';
 const TestimonialsPage = (): JSX.Element => {
   const [page, setPage] = useState(1);
   const [limit] = useState(10);
-  const [searchTerm, setSearchTerm] = useState('');
+  // const [searchTerm, setSearchTerm] = useState('');
 
   const [isAddModalOpen, setIsAddModalOpen] = useState(false);
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
@@ -33,24 +32,24 @@ const TestimonialsPage = (): JSX.Element => {
   const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false);
   const [testimonialToDelete, setTestimonialToDelete] = useState<string | null>(null);
 
-  const debouncedSearch = useDebounce(searchTerm, 500);
-
+  // const debouncedSearch = useDebounce(searchTerm, 500);
+  const search = '';
   const queryParams = useMemo(
     (): FilterTestimonialDto => ({
       page,
       limit,
-      search: debouncedSearch || undefined,
+      search,
     }),
-    [page, limit, debouncedSearch],
+    [page, limit, search],
   );
 
-  const { data, isLoading, isFetching, refetch } = useTestimonials(queryParams);
+  const { data, isLoading } = useTestimonials(queryParams);
   const deleteMutation = useDeleteTestimonial();
 
-  const handleSearchChange = (value: string): void => {
-    setSearchTerm(value);
-    setPage(1);
-  };
+  // const handleSearchChange = (value: string): void => {
+  //   setSearchTerm(value);
+  //   setPage(1);
+  // };
 
   const handleAdd = (): void => {
     setSelectedTestimonial(null);
@@ -95,16 +94,12 @@ const TestimonialsPage = (): JSX.Element => {
   const total = data?.pagination?.total || 0;
   const totalPages = data?.pagination?.totalPages || 1;
 
-  console.log(data,'test123');
-  
   return (
     <div className="animate-fade-in space-y-6">
       {/* Header */}
       <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
         <div>
-          <h1 className="text-gradient-brand text-3xl font-bold tracking-tight">
-            Testimonials
-          </h1>
+          <h1 className="text-gradient-brand text-3xl font-bold tracking-tight">Testimonials</h1>
           <p className="mt-1 text-base font-medium text-gray-600 dark:text-gray-400">
             Manage customer testimonials
           </p>
@@ -154,9 +149,7 @@ const TestimonialsPage = (): JSX.Element => {
                 <td colSpan={4} className="py-12">
                   <div className="text-center">
                     <MessageSquareQuote className="mx-auto h-12 w-12 text-gray-400" />
-                    <p className="mt-2 font-medium text-gray-500">
-                      No testimonials found
-                    </p>
+                    <p className="mt-2 font-medium text-gray-500">No testimonials found</p>
                   </div>
                 </td>
               </TableRow>
@@ -194,11 +187,7 @@ const TestimonialsPage = (): JSX.Element => {
 
                   <TableCell align="right">
                     <div className="flex items-center justify-end gap-2">
-                      <Button
-                        variant="ghost"
-                        size="sm"
-                        onClick={() => handleEdit(testimonial)}
-                      >
+                      <Button variant="ghost" size="sm" onClick={() => handleEdit(testimonial)}>
                         <Edit className="h-4 w-4" />
                       </Button>
 
@@ -235,11 +224,7 @@ const TestimonialsPage = (): JSX.Element => {
       </Card>
 
       {/* Modals */}
-      <TestimonialFormModal
-        isOpen={isAddModalOpen}
-        onClose={handleCloseModals}
-        mode="create"
-      />
+      <TestimonialFormModal isOpen={isAddModalOpen} onClose={handleCloseModals} mode="create" />
 
       <TestimonialFormModal
         isOpen={isEditModalOpen}

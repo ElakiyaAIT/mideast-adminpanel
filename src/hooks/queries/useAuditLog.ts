@@ -1,5 +1,5 @@
 import { useQuery, type UseQueryResult } from '@tanstack/react-query';
-import { auditApi } from '../../api';
+import { auditApi, type ApiResponse } from '../../api';
 import type { AuditLogDto, AuditLogQueryParams, PaginatedResponseDto } from '../../dto';
 
 /**
@@ -7,9 +7,11 @@ import type { AuditLogDto, AuditLogQueryParams, PaginatedResponseDto } from '../
  */
 export const useAuditLogs = (
   params?: AuditLogQueryParams,
-): UseQueryResult<PaginatedResponseDto<AuditLogDto>> => {
-  return useQuery<PaginatedResponseDto<AuditLogDto>>({
+): UseQueryResult<ApiResponse<PaginatedResponseDto<AuditLogDto>>> => {
+  return useQuery<ApiResponse<PaginatedResponseDto<AuditLogDto>>>({
     queryKey: ['audit-logs', params],
     queryFn: () => auditApi.getAuditLogs(params),
+    refetchOnMount:true,
+    staleTime:0
   });
 };

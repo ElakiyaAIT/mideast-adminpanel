@@ -297,7 +297,7 @@ export const equipmentSchema = yup.object({
 export const bannerSchema = yup.object({
   title: yup.string().required(),
 
-  imageUrl: yup.string().required().url(),
+  imageUrl: yup.string().nullable(),
 
   linkUrl: yup
     .string()
@@ -329,9 +329,11 @@ export const createCategorySchema = yup.object({
     .max(100, 'Slug must not exceed 100 characters')
     .matches(/^[a-z0-9]+(?:-[a-z0-9]+)*$/, 'Slug must be lowercase with hyphens only')
     .trim(),
-  description: yup.string()
-  .required('Description is required')
-  .max(500, 'Description must not exceed 500 characters').trim(),
+  description: yup
+    .string()
+    .required('Description is required')
+    .max(500, 'Description must not exceed 500 characters')
+    .trim(),
   isActive: yup.boolean().default(true),
 });
 
@@ -357,28 +359,33 @@ export const categorySchema = createCategorySchema;
 export const staticPageSchema = yup.object({
   title: yup
     .string()
+    .trim()
     .required('Title is required')
     .min(3, 'Title must be at least 3 characters')
-    .max(200, 'Title must not exceed 200 characters')
-    .trim(),
+    .max(200, 'Title must not exceed 200 characters'),
+
   slug: yup
     .string()
+    .trim()
     .required('Slug is required')
     .min(2, 'Slug must be at least 2 characters')
     .max(100, 'Slug must not exceed 100 characters')
-    .matches(/^[a-z0-9]+(?:-[a-z0-9]+)*$/, 'Slug must be lowercase with hyphens only')
-    .trim(),
+    .matches(/^[a-z0-9]+(?:-[a-z0-9]+)*$/, 'Slug must be lowercase with hyphens only'),
+
   content: yup
     .string()
+    .trim()
     .required('Content is required')
-    .min(10, 'Content must be at least 10 characters')
-    .trim(),
-  metaTitle: yup.string().max(100, 'Meta title must not exceed 100 characters').trim(),
-  metaDescription: yup.string().max(200, 'Meta description must not exceed 200 characters').trim(),
-  metaKeywords: yup.string().max(200, 'Meta keywords must not exceed 200 characters').trim(),
+    .min(10, 'Content must be at least 10 characters'),
+
+  metaTitle: yup.string().trim().max(100, 'Meta title must not exceed 100 characters'),
+
+  metaDescription: yup.string().trim().max(200, 'Meta description must not exceed 200 characters'),
+
+  metaKeywords: yup.array().of(yup.string().trim()),
+
   isPublished: yup.boolean().default(false),
 });
-
 // ===========================
 // NOTIFICATION FORMS
 // ===========================
@@ -463,12 +470,26 @@ export const refundSchema = yup.object({
 });
 
 export const testimonialSchema = yup.object({
-  name: yup.string().required('Client name is required'),
-  role: yup.string().required('Role is required'),
-  review: yup.string().required('Message is required'),
+  name: yup
+    .string()
+    .trim()
+    .min(2, 'Name must be at least 2 characters')
+    .max(50, 'Name cannot exceed 50 characters')
+    .required('Client name is required'),
+
+  role: yup
+    .string()
+    .trim()
+    .min(2, 'Role must be at least 2 characters')
+    .max(100, 'Role cannot exceed 100 characters')
+    .required('Role is required'),
+
+  review: yup
+    .string()
+    .trim()
+    .min(10, 'Testimonial Message must be at least 10 characters')
+    .required('Testimonial Message is required'),
 });
-
-
 
 // ===========================
 // TYPE EXPORTS

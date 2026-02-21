@@ -23,6 +23,8 @@ import {
   useDeleteStaticPage,
 } from '../../hooks/queries';
 import type { StaticPageDto, CreateStaticPageDto, UpdateStaticPageDto } from '../../dto';
+import { staticPageSchema } from '../../utils/validation';
+import { ValidationError } from 'yup';
 
 const StaticPagesPage = (): JSX.Element => {
   const [isFormModalOpen, setIsFormModalOpen] = useState(false);
@@ -30,6 +32,7 @@ const StaticPagesPage = (): JSX.Element => {
   const [isEditMode, setIsEditMode] = useState(false);
   const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false);
   const [pageToDelete, setPageToDelete] = useState<string | null>(null);
+  const [errors, setErrors] = useState<Record<string, string>>({});
 
   const [formData, setFormData] = useState<CreateStaticPageDto>({
     title: '',
@@ -47,6 +50,7 @@ const StaticPagesPage = (): JSX.Element => {
   const deleteMutation = useDeleteStaticPage();
 
   const handleAdd = (): void => {
+    setErrors({});
     setIsEditMode(false);
     setSelectedPage(null);
     setFormData({
@@ -62,6 +66,7 @@ const StaticPagesPage = (): JSX.Element => {
   };
 
   const handleEdit = (page: StaticPageDto): void => {
+    setErrors({});
     setIsEditMode(true);
     setSelectedPage(page);
     setFormData({
@@ -87,23 +92,61 @@ const StaticPagesPage = (): JSX.Element => {
       setPageToDelete(null);
     }
   };
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+    const target = e.target;
+    const name = target.name;
 
+    let value: string | boolean;
+    if (target instanceof HTMLInputElement && target.type === 'checkbox') {
+      value = target.checked; // ✅ safe
+    } else {
+      value = target.value; // ✅ safe
+    }
+
+    setFormData((prev) => ({
+      ...prev,
+      [name]: value,
+    }));
+
+    if (errors[name]) {
+      setErrors((prev) => ({ ...prev, [name]: '' }));
+    }
+  };
   const handleFormSubmit = async (e: React.FormEvent): Promise<void> => {
     e.preventDefault();
-    if (isEditMode && selectedPage) {
-      const updateData: UpdateStaticPageDto = {
-        title: formData.title,
-        content: formData.content,
-        metaTitle: formData.metaTitle,
-        metaDescription: formData.metaDescription,
-        metaKeywords: formData.metaKeywords,
-        isPublished: formData.isPublished,
-      };
-      await updateMutation.mutateAsync({ slug: selectedPage.slug, data: updateData });
-    } else {
-      await createMutation.mutateAsync(formData);
+    try {
+      setErrors({});
+      await staticPageSchema.validate(formData, {
+        abortEarly: false,
+      });
+      if (isEditMode && selectedPage) {
+        const updateData: UpdateStaticPageDto = {
+          title: formData.title,
+          content: formData.content,
+          metaTitle: formData.metaTitle,
+          metaDescription: formData.metaDescription,
+          metaKeywords: formData.metaKeywords,
+          isPublished: formData.isPublished,
+        };
+        await updateMutation.mutateAsync({ slug: selectedPage.slug, data: updateData });
+      } else {
+        await createMutation.mutateAsync(formData);
+      }
+      setIsFormModalOpen(false);
+    } catch (err: unknown) {
+      if (err instanceof ValidationError) {
+        const formErrors: Record<string, string> = {};
+        err.inner.forEach((validationError) => {
+          if (validationError.path) {
+            formErrors[validationError.path] = validationError.message;
+          }
+        });
+        setErrors(formErrors);
+      } else {
+        console.error('Unexpected error:', err);
+        // optionally set a global error state
+      }
     }
-    setIsFormModalOpen(false);
   };
 
   if (isLoading && !data) {
@@ -216,62 +259,75 @@ const StaticPagesPage = (): JSX.Element => {
       >
         <form onSubmit={handleFormSubmit} className="space-y-4">
           <div>
-            <label className="mb-2 block text-sm font-medium">Title *</label>
+            {/* <label className="mb-2 block text-sm font-medium">Title </label> */}
             <Input
+              label="Title"
               type="text"
+              name="title"
               value={formData.title}
-              onChange={(e) => setFormData({ ...formData, title: e.target.value })}
+              onChange={handleChange}
               required
+              error={errors?.title}
             />
           </div>
 
           {!isEditMode && (
             <div>
-              <label className="mb-2 block text-sm font-medium">Slug *</label>
+              {/* <label className="mb-2 block text-sm font-medium">Slug *</label> */}
               <Input
+                label="Slug"
                 type="text"
+                name="slug"
                 value={formData.slug}
-                onChange={(e) => setFormData({ ...formData, slug: e.target.value })}
+                onChange={handleChange}
                 required
+                error={errors?.slug}
               />
             </div>
           )}
 
           <div>
-            <label className="mb-2 block text-sm font-medium">Content *</label>
+            <label className="mb-2 block text-sm font-medium">
+              Content <span className="text-sm text-red-500">*</span>
+            </label>
             <textarea
+              name="content"
               value={formData.content}
-              onChange={(e) => setFormData({ ...formData, content: e.target.value })}
+              onChange={handleChange}
               className="w-full rounded-lg border p-2 dark:border-gray-600 dark:bg-gray-800"
               rows={6}
-              required
             />
+            {errors.content && <p className="mt-1 text-sm text-red-500">{errors.content}</p>}
           </div>
 
           <div>
-            <label className="mb-2 block text-sm font-medium">Meta Title</label>
+            {/* <label className="mb-2 block text-sm font-medium">Meta Title</label> */}
             <Input
+              label="Meta Title"
               type="text"
+              name="metaTitle"
               value={formData.metaTitle}
-              onChange={(e) => setFormData({ ...formData, metaTitle: e.target.value })}
+              onChange={handleChange}
+              error={errors?.metaTitle}
             />
           </div>
 
           <div>
             <label className="mb-2 block text-sm font-medium">Meta Description</label>
             <textarea
+              name="metaDescription"
               value={formData.metaDescription}
-              onChange={(e) => setFormData({ ...formData, metaDescription: e.target.value })}
+              onChange={handleChange}
               className="w-full rounded-lg border p-2 dark:border-gray-600 dark:bg-gray-800"
               rows={3}
             />
+            {errors?.metaDescription && (
+              <p className="mt-1 text-sm text-red-500">{errors?.metaDescription}</p>
+            )}
           </div>
 
           <div className="flex items-center gap-2">
-            <Checkbox
-              checked={formData.isPublished}
-              onChange={(e) => setFormData({ ...formData, isPublished: e.target.checked })}
-            />
+            <Checkbox name="isPublished" checked={formData.isPublished} onChange={handleChange} />
             <label className="text-sm font-medium">Published</label>
           </div>
 

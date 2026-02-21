@@ -51,25 +51,25 @@ export const equipmentCategoryApi = {
     );
     return response.data;
   },
-/**
- * Upload equipment category image
- */
-uploadCategoryImage: async (file: File): Promise<ApiResponse<{ urls: string[] }>> => {
-  const formData = new FormData();
-  formData.append('images', file);
+  /**
+   * Upload equipment category image
+   */
+  uploadCategoryImage: async (file: File): Promise<ApiResponse<{ urls: string[] }>> => {
+    const formData = new FormData();
+    formData.append('images', file);
 
-  const response = await axiosInstance.post<ApiResponse<{ urls: string[] }>>(
-    '/admin/upload/equipment-category-images',
-    formData,
-    {
-      headers: {
-        'Content-Type': 'multipart/form-data',
+    const response = await axiosInstance.post<ApiResponse<{ urls: string[] }>>(
+      '/admin/upload/equipment-category-images',
+      formData,
+      {
+        headers: {
+          'Content-Type': 'multipart/form-data',
+        },
       },
-    },
-  );
+    );
 
-  return response.data;
-},
+    return response.data;
+  },
 
   /**
    * Update an equipment category

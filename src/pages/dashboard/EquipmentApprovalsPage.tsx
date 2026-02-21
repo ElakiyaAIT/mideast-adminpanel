@@ -256,6 +256,7 @@ const EquipmentApprovalsPage = (): JSX.Element => {
         confirmText="Reject"
         isLoading={rejectMutation.isPending}
         multiline
+        minlength={10}
       />
     </div>
   );

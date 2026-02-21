@@ -56,6 +56,9 @@ export const useUsersList = (
 
 /**
  * Update user profile mutation
+ * updated on feb 20.2.2026
+ * response.data.user -> response.data
+ * !response.data.user -> response.data
  */
 export const useUpdateProfile = () => {
   const queryClient = useQueryClient();
@@ -63,10 +66,10 @@ export const useUpdateProfile = () => {
   return useMutation({
     mutationFn: async (data: UpdateUserProfileDto) => {
       const response = await userApi.updateProfile(data);
-      if (!response.success || !response.data.user) {
+      if (!response.success || !response.data) {
         throw new Error(response.message || 'Failed to update profile');
       }
-      return response.data.user;
+      return response.data;
     },
     onSuccess: (user) => {
       // Update both user and auth profile queries

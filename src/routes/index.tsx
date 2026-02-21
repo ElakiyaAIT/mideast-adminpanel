@@ -36,7 +36,7 @@ const NotificationsPage = lazy(() => import('../pages/dashboard/NotificationsPag
 const SystemSettingsPage = lazy(() => import('../pages/dashboard/SystemSettingsPage'));
 const AuditLogsPage = lazy(() => import('../pages/dashboard/AuditLogsPage'));
 //Testimonial Pages
-const TestimonialPage=lazy(()=>import ('../pages/dashboard/TestimonialsPage'));
+const TestimonialPage = lazy(() => import('../pages/dashboard/TestimonialsPage'));
 export const AppRoutes = (): JSX.Element => {
   return (
     <BrowserRouter>
@@ -294,17 +294,18 @@ export const AppRoutes = (): JSX.Element => {
               </Suspense>
             }
           />
-           <Route
+          <Route
             path="testimonials"
             element={
               <Suspense
-              fallback={<SuspenseFallback message="Loading Testimonials..." fullScreen={false}/>}>
-              <TestimonialPage/>
+                fallback={<SuspenseFallback message="Loading Testimonials..." fullScreen={false} />}
+              >
+                <TestimonialPage />
               </Suspense>
             }
-            />
+          />
         </Route>
-           
+
         {/* Catch all route */}
         <Route path="*" element={<Navigate to={ROUTES.HOME} replace />} />
       </Routes>

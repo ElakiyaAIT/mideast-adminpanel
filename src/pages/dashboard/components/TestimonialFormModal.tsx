@@ -5,7 +5,11 @@ import { Modal, Input, Button, Textarea, ImageUpload } from '../../../components
 
 import { testimonialSchema, type TestimonialFormData } from '../../../utils/validation';
 import { testimonialApi } from '../../../api/testimonialApi';
-import type { TestimonialDto, CreateTestimonialDto, UpdateTestimonialDto } from '../../../dto/testimonial.dto';
+import type {
+  TestimonialDto,
+  CreateTestimonialDto,
+  UpdateTestimonialDto,
+} from '../../../dto/testimonial.dto';
 import { useCreateTestimonial, useUpdateTestimonial } from '../../../hooks/queries/useTestimonial';
 
 interface TestimonialFormModalProps {
@@ -58,8 +62,10 @@ const TestimonialFormModal = ({
           review: testimonial.review,
         });
 
-        setExistingImage(testimonial.image);
-        setImageFile(null);
+        setTimeout(() => {
+          setExistingImage(testimonial.image);
+          setImageFile(null);
+        }, 0);
       } else {
         reset({
           name: '',
@@ -67,8 +73,10 @@ const TestimonialFormModal = ({
           review: '',
         });
 
-        setExistingImage(undefined);
-        setImageFile(null);
+        setTimeout(() => {
+          setExistingImage(undefined);
+          setImageFile(null);
+        }, 0);
       }
     }
 
@@ -79,13 +87,13 @@ const TestimonialFormModal = ({
   const handleImageChange = (files: File[]): void => {
     setImageFile(files[0] || null);
   };
-const handleRemoveImage = (): void => {
+  const handleRemoveImage = (): void => {
     setExistingImage(null);
-
-};
+  };
   const onSubmit = async (data: TestimonialFormData): Promise<void> => {
-    let image = existingImage;
-console.log("imageFile before upload:", imageFile);
+    let image: string | null = existingImage ?? null;
+
+    // console.log('imageFile before upload:', imageFile);
 
     if (imageFile) {
       setIsUploading(true);
@@ -128,17 +136,9 @@ console.log("imageFile before upload:", imageFile);
       onClose={onClose}
       title={mode === 'create' ? 'Add Testimonial' : 'Edit Testimonial'}
     >
-      <form
-        onSubmit={handleSubmit(onSubmit)}
-        className="max-h-[70vh] space-y-4 overflow-y-auto"
-      >
+      <form onSubmit={handleSubmit(onSubmit)} className="max-h-[70vh] space-y-4 overflow-y-auto">
         {/* Basic Info */}
-        <Input
-          label="Client Name"
-          {...register('name')}
-          error={errors.name?.message}
-          required
-        />
+        <Input label="Client Name" {...register('name')} error={errors.name?.message} required />
 
         <Input
           label="Designation"
@@ -159,7 +159,7 @@ console.log("imageFile before upload:", imageFile);
           label="Client Image"
           maxFiles={1}
           value={existingImage ? [existingImage] : []}
-          onRemove={()=> handleRemoveImage()}
+          onRemove={() => handleRemoveImage()}
           onChange={handleImageChange}
           disabled={isUploading}
           helperText="Upload client photo"
@@ -171,16 +171,11 @@ console.log("imageFile before upload:", imageFile);
             {isLoading
               ? 'Saving...'
               : mode === 'create'
-              ? 'Create Testimonial'
-              : 'Update Testimonial'}
+                ? 'Create Testimonial'
+                : 'Update Testimonial'}
           </Button>
 
-          <Button
-            type="button"
-            variant="outline"
-            onClick={onClose}
-            disabled={isLoading}
-          >
+          <Button type="button" variant="outline" onClick={onClose} disabled={isLoading}>
             Cancel
           </Button>
         </div>

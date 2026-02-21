@@ -51,7 +51,7 @@ export interface BannerDto {
 export interface CreateBannerDto {
   title: string;
   description?: string;
-  imageUrl: string;
+  imageUrl: string | null;
   linkUrl?: string | null;
   position: BannerPosition;
   status?: BannerStatus;
@@ -63,7 +63,7 @@ export interface CreateBannerDto {
 export interface UpdateBannerDto {
   title?: string;
   description?: string;
-  imageUrl?: string;
+  imageUrl?: string | null;
   linkUrl?: string | null;
   position?: BannerPosition;
   status?: BannerStatus;

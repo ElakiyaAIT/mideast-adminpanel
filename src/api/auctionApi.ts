@@ -57,28 +57,28 @@ export const auctionApi = {
     const response = await axiosInstance.post<ApiResponse<AuctionDto>>('/admin/auctions', data);
     return response.data;
   },
-/**
- * Upload auction images
- */
-uploadAuctionImages: async (files: File[]): Promise<ApiResponse<{ urls: string[] }>> => {
-  const formData = new FormData();
+  /**
+   * Upload auction images
+   */
+  uploadAuctionImages: async (files: File[]): Promise<ApiResponse<{ urls: string[] }>> => {
+    const formData = new FormData();
 
-  files.forEach((file) => {
-    formData.append('images', file);
-  });
+    files.forEach((file) => {
+      formData.append('images', file);
+    });
 
-  const response = await axiosInstance.post<ApiResponse<{ urls: string[] }>>(
-    '/admin/upload/auction-images',
-    formData,
-    {
-      headers: {
-        'Content-Type': 'multipart/form-data',
+    const response = await axiosInstance.post<ApiResponse<{ urls: string[] }>>(
+      '/admin/upload/auction-images',
+      formData,
+      {
+        headers: {
+          'Content-Type': 'multipart/form-data',
+        },
       },
-    },
-  );
+    );
 
-  return response.data;
-},
+    return response.data;
+  },
 
   /**
    * Update an auction

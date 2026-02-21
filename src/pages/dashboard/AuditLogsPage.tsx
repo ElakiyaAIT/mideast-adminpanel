@@ -70,9 +70,9 @@ const AuditLogsPage = (): JSX.Element => {
     );
   }
 
-  const logs = data?.items || [];
-  const total = data?.pagination?.total || 0;
-  const totalPages = data?.pagination?.totalPages || 1;
+  const logs = data?.data?.items || [];
+  const total = data?.data?.pagination?.total || 0;
+  const totalPages = data?.data?.pagination?.totalPages || 1;
 
   return (
     <div className="animate-fade-in space-y-6">
@@ -131,9 +131,9 @@ const AuditLogsPage = (): JSX.Element => {
                   <TableCell>
                     <div>
                       <p className="font-semibold text-gray-900 dark:text-white">
-                        {log.admin?.firstName} {log.admin?.lastName}
+                        {log.adminId?.firstName} {log.adminId?.lastName}
                       </p>
-                      <p className="text-xs text-gray-500">{log.admin?.email}</p>
+                      <p className="text-xs text-gray-500">{log.adminId?.email}</p>
                     </div>
                   </TableCell>
                   <TableCell>{getActionBadge(log.action)}</TableCell>

@@ -28,8 +28,7 @@ export type AuditAction = (typeof AuditActionType)[keyof typeof AuditActionType]
 
 export interface AuditLogDto {
   _id: string;
-  adminId: string;
-  admin?: {
+  adminId?: {
     _id: string;
     firstName: string;
     lastName: string;

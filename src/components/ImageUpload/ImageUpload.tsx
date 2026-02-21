@@ -1,6 +1,7 @@
 import { useState, useRef, type ChangeEvent, type JSX } from 'react';
 import { cn } from '../../utils';
 import { Upload, X, AlertCircle } from 'lucide-react';
+import React from 'react';
 // import { Button } from '../Button';
 
 interface ImagePreview {
@@ -133,7 +134,9 @@ export const ImageUpload = ({
             : hasError
               ? 'border-red-500'
               : 'border-gray-300 dark:border-gray-600',
-          !disabled && canAddMore && 'cursor-pointer hover:border-primary-400 hover:bg-primary-50/30',
+          !disabled &&
+            canAddMore &&
+            'cursor-pointer hover:border-primary-400 hover:bg-primary-50/30',
           disabled && 'cursor-not-allowed opacity-50',
         )}
         onDragEnter={handleDrag}
@@ -188,11 +191,7 @@ export const ImageUpload = ({
           {value.map((url, index) => (
             <div key={`existing-${index}`} className="group relative">
               <div className="glass-light overflow-hidden rounded-xl border border-white/30 dark:border-white/10">
-                <img
-                  src={url}
-                  alt={`Existing ${index + 1}`}
-                  className="h-32 w-full object-cover"
-                />
+                <img src={url} alt={`Existing ${index + 1}`} className="h-32 w-full object-cover" />
               </div>
               {!disabled && (
                 <button

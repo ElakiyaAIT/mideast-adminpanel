@@ -70,7 +70,7 @@ export const useCreateAuction = () => {
     mutationFn: (data: CreateAuctionDto) => auctionApi.createAuction(data),
     onSuccess: () => {
       void queryClient.invalidateQueries({ queryKey: ['auctions'] });
-      console.log('Auction created successfully');
+      // console.log('Auction created successfully');
     },
     onError: (error: Error) => {
       console.error(error.message || 'Failed to create auction');
@@ -90,7 +90,7 @@ export const useUpdateAuction = () => {
     onSuccess: (_data, variables) => {
       void queryClient.invalidateQueries({ queryKey: ['auctions'] });
       void queryClient.invalidateQueries({ queryKey: ['auction', variables.id] });
-      console.log('Auction updated successfully');
+      // console.log('Auction updated successfully');
     },
     onError: (error: Error) => {
       console.error(error.message || 'Failed to update auction');
@@ -110,7 +110,7 @@ export const useAssignEquipment = () => {
     onSuccess: (_data, variables) => {
       void queryClient.invalidateQueries({ queryKey: ['auction', variables.id, 'equipment'] });
       void queryClient.invalidateQueries({ queryKey: ['auction', variables.id] });
-      console.log('Equipment assigned successfully');
+      // console.log('Equipment assigned successfully');
     },
     onError: (error: Error) => {
       console.error(error.message || 'Failed to assign equipment');
@@ -129,7 +129,7 @@ export const useCancelAuction = () => {
     onSuccess: (_data, id) => {
       void queryClient.invalidateQueries({ queryKey: ['auctions'] });
       void queryClient.invalidateQueries({ queryKey: ['auction', id] });
-      console.log('Auction cancelled successfully');
+      // console.log('Auction cancelled successfully');
     },
     onError: (error: Error) => {
       console.error(error.message || 'Failed to cancel auction');
@@ -147,7 +147,7 @@ export const useDeleteAuction = () => {
     mutationFn: (id: string) => auctionApi.deleteAuction(id),
     onSuccess: () => {
       void queryClient.invalidateQueries({ queryKey: ['auctions'] });
-      console.log('Auction deleted successfully');
+      // console.log('Auction deleted successfully');
     },
     onError: (error: Error) => {
       console.error(error.message || 'Failed to delete auction');

@@ -188,7 +188,7 @@ const EquipmentFormModal = ({
           hoursUsed: data.hoursUsed,
           condition: data.condition || undefined,
           location: data.location,
-          images: allImageUrls.length > 0 ? allImageUrls : undefined,
+          images: allImageUrls,
         };
 
         await updateMutation.mutateAsync({ id: equipment._id, data: updateData });

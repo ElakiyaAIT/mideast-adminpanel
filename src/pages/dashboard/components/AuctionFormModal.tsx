@@ -25,8 +25,8 @@ const AuctionFormModal = ({
   const createMutation = useCreateAuction();
   const updateMutation = useUpdateAuction();
   const [imageFiles, setImageFiles] = useState<File[]>([]);
-const [existingImages, setExistingImages] = useState<string[]>([]);
-const [isUploading, setIsUploading] = useState(false);
+  const [existingImages, setExistingImages] = useState<string[]>([]);
+  const [isUploading, setIsUploading] = useState(false);
 
   const prevOpenRef = useRef(isOpen);
   const prevAuctionIdRef = useRef(auction?._id);
@@ -78,8 +78,10 @@ const [isUploading, setIsUploading] = useState(false);
           proxibidId: auction.externalPlatform?.proxibidId || '',
           equipmentfactsId: auction.externalPlatform?.equipmentfactsId || '',
         });
-         setExistingImages(auction.images || []);
-         setImageFiles([]);
+        setTimeout(() => {
+          setExistingImages(auction.images || []);
+          setImageFiles([]);
+        }, 0);
       } else {
         reset({
           title: '',
@@ -100,23 +102,23 @@ const [isUploading, setIsUploading] = useState(false);
     prevAuctionIdRef.current = auction?._id;
   }, [mode, auction, isOpen, reset]);
 
-const handleImageChange = (files: File[]): void => {
-  setImageFiles(files);
-};
+  const handleImageChange = (files: File[]): void => {
+    setImageFiles(files);
+  };
 
-const handleRemoveImage = (index: number): void => {
-  setExistingImages((prev) => prev.filter((_, i) => i !== index));
-};
+  const handleRemoveImage = (index: number): void => {
+    setExistingImages((prev) => prev.filter((_, i) => i !== index));
+  };
 
   const onSubmit = async (data: AuctionFormData): Promise<void> => {
-      let images = [...existingImages];
+    let images = [...existingImages];
 
-  if (imageFiles.length > 0) {
-    setIsUploading(true);
-    const uploadRes = await auctionApi.uploadAuctionImages(imageFiles);
-    images = [...images, ...uploadRes.data.urls];
-    setIsUploading(false);
-  }
+    if (imageFiles.length > 0) {
+      setIsUploading(true);
+      const uploadRes = await auctionApi.uploadAuctionImages(imageFiles);
+      images = [...images, ...uploadRes.data.urls];
+      setIsUploading(false);
+    }
     const location =
       data.address || data.city || data.state
         ? {
@@ -156,8 +158,7 @@ const handleRemoveImage = (index: number): void => {
         endDate: new Date(data.endDate).toISOString(),
         location,
         externalPlatform,
-        images: images.length > 0 ? images : undefined
-
+        images,
       };
 
       await updateMutation.mutateAsync({ id: auction._id, data: updateData });

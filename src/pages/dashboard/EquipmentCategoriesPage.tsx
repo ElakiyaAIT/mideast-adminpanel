@@ -1,4 +1,4 @@
-import { useState, useMemo, type JSX, useEffect } from 'react';
+import { useState, useMemo, type JSX } from 'react';
 import { useForm, Controller } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import {
@@ -34,14 +34,13 @@ import type {
   UpdateEquipmentCategoryDto,
 } from '../../dto';
 import { createCategorySchema, type CreateCategoryFormData } from '../../utils/validation';
-import {  equipmentCategoryApi } from '../../api/equipmentApi';
+import { equipmentCategoryApi } from '../../api/equipmentApi';
 
 const EquipmentCategoriesPage = (): JSX.Element => {
   const [page, setPage] = useState(1);
   const [limit] = useState(10);
   const [searchTerm, setSearchTerm] = useState('');
   const [isImageRemoved, setIsImageRemoved] = useState(false);
-
 
   // Modal states
   const [isFormModalOpen, setIsFormModalOpen] = useState(false);
@@ -52,8 +51,8 @@ const EquipmentCategoriesPage = (): JSX.Element => {
 
   //IMAGE UPLOAD IN EQUIPMENT CATEGORY
   const [imageFile, setImageFile] = useState<File | null>(null);
-const [existingImage, setExistingImage] = useState<string | null>(null);
-const [isUploading, setIsUploading] = useState(false);
+  const [existingImage, setExistingImage] = useState<string | null>(null);
+  const [isUploading, setIsUploading] = useState(false);
 
   // Debounce search term
   const debouncedSearch = useDebounce(searchTerm, 500);
@@ -109,7 +108,7 @@ const [isUploading, setIsUploading] = useState(false);
   const handleAddCategory = (): void => {
     setIsEditMode(false);
     setSelectedCategory(null);
-    setIsImageRemoved(false)
+    setIsImageRemoved(false);
     reset({
       name: '',
       slug: '',
@@ -122,14 +121,14 @@ const [isUploading, setIsUploading] = useState(false);
   const handleEditCategory = (category: EquipmentCategoryDto): void => {
     setIsEditMode(true);
     setSelectedCategory(category);
-    setIsImageRemoved(false)
+    setIsImageRemoved(false);
     reset({
       name: category.name,
       slug: category.slug,
       description: category.description || '',
       isActive: category.isActive,
     });
-     setExistingImage(category.imageUrl ?? null);
+    setExistingImage(category.imageUrl ?? null);
     setImageFile(null); // reset new upload
     setIsFormModalOpen(true);
   };
@@ -141,31 +140,26 @@ const [isUploading, setIsUploading] = useState(false);
 
   //IMAGE UPLOAD
   const handleImageChange = (files: File[]): void => {
-  setImageFile(files[0] ?? null); // single image
-};
+    setImageFile(files[0] ?? null); // single image
+  };
 
-const handleRemoveImage = (): void => {
-  setExistingImage(null);
+  const handleRemoveImage = (): void => {
+    setExistingImage(null);
     setImageFile(null);
-      setIsImageRemoved(true);
-
-
-};
-
+    setIsImageRemoved(true);
+  };
 
   const onSubmit = async (data: CreateCategoryFormData): Promise<void> => {
-    
-      let imageUrl: string | null | undefined = undefined;
+    let imageUrl: string | null | undefined = undefined;
 
-if (imageFile) {
-  setIsUploading(true);
-  const response = await equipmentCategoryApi.uploadCategoryImage(imageFile);
-  imageUrl = response.data.urls[0];
-  setIsUploading(false);
-} else if (isImageRemoved) {
-  imageUrl = null;
-}
-
+    if (imageFile) {
+      setIsUploading(true);
+      const response = await equipmentCategoryApi.uploadCategoryImage(imageFile);
+      imageUrl = response.data.urls[0];
+      setIsUploading(false);
+    } else if (isImageRemoved) {
+      imageUrl = null;
+    }
 
     if (isEditMode && selectedCategory) {
       // In edit mode, we only send the fields that are allowed to be updated
@@ -173,14 +167,13 @@ if (imageFile) {
         name: data.name,
         description: data.description,
         isActive: data.isActive,
-              ...(imageUrl !== undefined && { imageUrl }), // ✅ key line
-
+        ...(imageUrl !== undefined && { imageUrl }), // ✅ key line
       };
       await updateMutation.mutateAsync({ id: selectedCategory._id, data: updateData });
     } else {
-       const createData: CreateEquipmentCategoryDto = {
+      const createData: CreateEquipmentCategoryDto = {
         ...data,
-          description: data.description ?? '',
+        description: data.description ?? '',
         imageUrl,
       };
       // In create mode, we send all fields including slug
@@ -216,21 +209,21 @@ if (imageFile) {
   const categories = data?.items || [];
   const total = data?.pagination?.total || 0;
   const totalPages = data?.pagination?.totalPages || 1;
-const resetFormState = (): void => {
-  reset({
-    name: '',
-    slug: '',
-    description: '',
-    isActive: true,
-  });
-  setImageFile(null);
-  setExistingImage(null);
-  setIsEditMode(false);
-  setSelectedCategory(null);
-  setIsImageRemoved(false);
-};
+  const resetFormState = (): void => {
+    reset({
+      name: '',
+      slug: '',
+      description: '',
+      isActive: true,
+    });
+    setImageFile(null);
+    setExistingImage(null);
+    setIsEditMode(false);
+    setSelectedCategory(null);
+    setIsImageRemoved(false);
+  };
 
-    return (
+  return (
     <div className="animate-fade-in space-y-6">
       {/* Header */}
       <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
@@ -382,7 +375,10 @@ const resetFormState = (): void => {
       {/* Form Modal */}
       <Modal
         isOpen={isFormModalOpen}
-        onClose={() => {setIsFormModalOpen(false);resetFormState()}}
+        onClose={() => {
+          setIsFormModalOpen(false);
+          resetFormState();
+        }}
         title={isEditMode ? 'Edit Category' : 'Add Category'}
       >
         <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
@@ -408,7 +404,7 @@ const resetFormState = (): void => {
 
           <div>
             <label className="mb-2 block text-sm font-medium text-gray-700 dark:text-gray-300">
-              Description  <span className="ml-1 text-red-500">*</span>
+              Description <span className="ml-1 text-red-500">*</span>
             </label>
             <textarea
               placeholder="Enter category description"
@@ -436,16 +432,15 @@ const resetFormState = (): void => {
               />
             )}
           />
-            <ImageUpload
-              label="Category Image"
-              maxFiles={1}
-              value={existingImage ? [existingImage] : []}
-              onChange={handleImageChange}
-              onRemove={() => handleRemoveImage()}
-              disabled={isUploading}
-              helperText="Upload a category image"
-            />
-
+          <ImageUpload
+            label="Category Image"
+            maxFiles={1}
+            value={existingImage ? [existingImage] : []}
+            onChange={handleImageChange}
+            onRemove={() => handleRemoveImage()}
+            disabled={isUploading}
+            helperText="Upload a category image"
+          />
 
           <div className="flex gap-3">
             <Button
@@ -455,7 +450,14 @@ const resetFormState = (): void => {
             >
               {createMutation.isPending || updateMutation.isPending ? 'Saving...' : 'Save'}
             </Button>
-            <Button type="button" variant="outline" onClick={() => {setIsFormModalOpen(false);resetFormState()}}>
+            <Button
+              type="button"
+              variant="outline"
+              onClick={() => {
+                setIsFormModalOpen(false);
+                resetFormState();
+              }}
+            >
               Cancel
             </Button>
           </div>
