@@ -62,7 +62,7 @@ const ProfilePage = (): JSX.Element => {
   return (
     <div className="space-y-6">
       <div>
-        <h1 className="text-gradient-brand text-3xl font-bold tracking-tight">Profile</h1>
+        {/* <h1 className="text-gradient-brand text-3xl font-bold tracking-tight">Profile</h1> */}
         <p className="mt-2 text-base font-medium text-gray-600 dark:text-gray-400">
           Manage your account information and preferences.
         </p>

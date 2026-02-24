@@ -2,7 +2,7 @@ import { Moon, Sun, LogOut, Bell, Search, Menu } from 'lucide-react';
 import { useAppDispatch, useAppSelector } from '../../hooks/redux';
 import { toggleTheme } from '../../store/themeSlice';
 import { useLogout, useCurrentUser } from '../../hooks/queries';
-import { useLocation } from 'react-router-dom';
+import { NavLink, useLocation } from 'react-router-dom';
 import { ROUTES } from '../../constants';
 import { Button } from '../Button';
 import { LogoutConfirmModal } from '../LogoutConfirmModal';
@@ -109,9 +109,11 @@ export const Header = (): JSX.Element => {
 
           {/* User Avatar (Desktop) */}
           <div className="hidden items-center gap-3 border-l border-white/20 pl-3 dark:border-white/10 lg:flex">
-            <div className="hover:shadow-glow-brand-lg flex h-10 w-10 cursor-pointer items-center justify-center rounded-xl border border-primary-400/30 bg-gradient-to-br from-primary-500 via-primary-500 to-primary-600 text-sm font-bold text-white backdrop-blur-sm transition-all duration-300 hover:scale-110">
-              {user?.firstName?.[0]?.toUpperCase() || 'U'}
-            </div>
+            <NavLink to={ROUTES.PROFILE}>
+              <div className="hover:shadow-glow-brand-lg flex h-10 w-10 cursor-pointer items-center justify-center rounded-xl border border-primary-400/30 bg-gradient-to-br from-primary-500 via-primary-500 to-primary-600 text-sm font-bold text-white backdrop-blur-sm transition-all duration-300 hover:scale-110">
+                {user?.firstName?.[0]?.toUpperCase() || 'U'}
+              </div>
+            </NavLink>
           </div>
 
           {/* Logout Button */}
