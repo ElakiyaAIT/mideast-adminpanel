@@ -61,8 +61,8 @@ const AuctionFormModal = ({
     if (justOpened || auctionChanged) {
       // Format dates for input[type="datetime-local"]
       const formatDateForInput = (dateString: string) => {
-        const date = new Date(dateString);
-        return date.toISOString().slice(0, 16);
+        // const date = new Date(dateString);
+        return new Date(dateString).toLocaleString('sv-SE').slice(0, 16);
       };
 
       if (mode === 'edit' && auction) {

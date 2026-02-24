@@ -5,6 +5,7 @@ import type {
   SendNotificationDto,
   NotificationQueryParams,
   PaginatedResponseDto,
+  ApiResponse,
 } from '../../dto';
 
 /**
@@ -12,8 +13,8 @@ import type {
  */
 export const useNotifications = (
   params?: NotificationQueryParams,
-): UseQueryResult<PaginatedResponseDto<NotificationDto>> => {
-  return useQuery<PaginatedResponseDto<NotificationDto>>({
+): UseQueryResult<ApiResponse<PaginatedResponseDto<NotificationDto>>> => {
+  return useQuery<ApiResponse<PaginatedResponseDto<NotificationDto>>>({
     queryKey: ['notifications', params],
     queryFn: () => notificationApi.getNotifications(params),
   });

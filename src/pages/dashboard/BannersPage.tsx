@@ -170,13 +170,59 @@ const BannersPage = (): JSX.Element => {
       </Badge>
     );
   };
-
   if (isLoading && !data) {
     return (
       <div className="animate-fade-in space-y-6">
-        <Skeleton variant="text" width="250px" height={40} />
+        <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+          <div>
+            <Skeleton variant="text" width={220} height={32} />
+            <Skeleton variant="text" width={320} height={18} />
+          </div>
+          <div className="flex gap-2">
+            <Skeleton variant="rectangular" width={120} height={32} />
+            <Skeleton variant="rectangular" width={32} height={32} />
+          </div>
+        </div>
         <Card>
-          <Skeleton variant="rectangular" width="100%" height={400} />
+          <Table>
+            <TableHeader>
+              <TableRow>
+                <TableHead>Title</TableHead>
+                <TableHead>Position</TableHead>
+                <TableHead>Status</TableHead>
+                <TableHead>Order</TableHead>
+                <TableHead>Clicks</TableHead>
+                <TableHead align="right">Actions</TableHead>
+              </TableRow>
+            </TableHeader>
+            <TableBody>
+              {Array.from({ length: 5 }).map((_, index) => (
+                <TableRow key={index} className="h-16">
+                  <TableCell>
+                    <Skeleton variant="text" width={140} height={16} />
+                  </TableCell>
+                  <TableCell>
+                    <Skeleton variant="text" width={100} height={16} />
+                  </TableCell>
+                  <TableCell>
+                    <Skeleton variant="text" width={80} height={16} />
+                  </TableCell>
+                  <TableCell>
+                    <Skeleton variant="text" width={60} height={16} />
+                  </TableCell>
+                  <TableCell>
+                    <Skeleton variant="text" width={60} height={16} />
+                  </TableCell>
+                  <TableCell align="right">
+                    <div className="flex items-center justify-end gap-2">
+                      <Skeleton variant="rectangular" width={32} height={32} />
+                      <Skeleton variant="rectangular" width={32} height={32} />
+                    </div>
+                  </TableCell>
+                </TableRow>
+              ))}
+            </TableBody>
+          </Table>
         </Card>
       </div>
     );

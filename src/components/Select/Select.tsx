@@ -12,10 +12,11 @@ export interface SelectProps extends React.SelectHTMLAttributes<HTMLSelectElemen
   helperText?: string;
   options: SelectOption[];
   required?: boolean;
+  multiple?: boolean;
 }
 
 const Select = forwardRef<HTMLSelectElement, SelectProps>(
-  ({ label, error, helperText, className = '', options, required, ...props }, ref) => {
+  ({ label, error, helperText, className = '', options, multiple, required, ...props }, ref) => {
     return (
       <div className="w-full">
         {label && (
@@ -26,6 +27,7 @@ const Select = forwardRef<HTMLSelectElement, SelectProps>(
         )}
         <select
           ref={ref}
+          // multiple={multiple}
           className={cn(
             'w-full rounded-xl px-4 py-3 transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-primary-500/50',
             'glass-light text-gray-900 dark:text-gray-100',
@@ -37,7 +39,8 @@ const Select = forwardRef<HTMLSelectElement, SelectProps>(
           )}
           {...props}
         >
-          <option value="">Select...</option>
+          {!multiple && <option value="">Select...</option>}
+
           {options.map((option) => (
             <option key={option.value} value={option.value}>
               {option.label}

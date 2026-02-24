@@ -6,7 +6,7 @@
   "tabWidth": 2,
   "useTabs": false,
   "arrowParens": "always",
-  "endOfLine": "auto",
+  "endOfLine": "lf",
   "bracketSpacing": true,
   "bracketSameLine": false,
   "quoteProps": "as-needed",
@@ -15,5 +15,4 @@
   "htmlWhitespaceSensitivity": "css",
   "embeddedLanguageFormatting": "auto",
   "plugins": ["prettier-plugin-tailwindcss"]
-  
 }

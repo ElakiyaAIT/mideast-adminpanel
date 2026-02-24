@@ -62,9 +62,73 @@ const AuditLogsPage = (): JSX.Element => {
   if (isLoading && !data) {
     return (
       <div className="animate-fade-in space-y-6">
-        <Skeleton variant="text" width="250px" height={40} />
+        <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+          <div className="space-y-2">
+            <Skeleton variant="text" width={220} height={32} />
+            <Skeleton variant="text" width={320} height={18} />
+          </div>
+          <div className="flex gap-2">
+            <Skeleton variant="rectangular" width={120} height={32} />
+            <Skeleton variant="rectangular" width={32} height={32} />
+          </div>
+        </div>
         <Card>
-          <Skeleton variant="rectangular" width="100%" height={400} />
+          <Table>
+            <TableHeader>
+              <TableRow>
+                <TableHead>Admin</TableHead>
+                <TableHead>Action</TableHead>
+                <TableHead>Description</TableHead>
+                <TableHead>Target</TableHead>
+                <TableHead>IP Address</TableHead>
+                <TableHead>Date</TableHead>
+              </TableRow>
+            </TableHeader>
+            <TableBody>
+              {Array.from({ length: 5 }).map((_, index) => (
+                <TableRow key={index} className="h-16">
+                  {/* Admin */}
+                  <TableCell>
+                    <div className="space-y-2">
+                      <Skeleton variant="text" width={140} height={16} />
+                      <Skeleton variant="text" width={180} height={12} />
+                    </div>
+                  </TableCell>
+
+                  {/* Action */}
+                  <TableCell>
+                    <Skeleton variant="rounded" width={90} height={24} />
+                  </TableCell>
+
+                  {/* Description */}
+                  <TableCell className="max-w-xs">
+                    <Skeleton variant="text" width="90%" height={16} />
+                  </TableCell>
+
+                  {/* Target */}
+                  <TableCell>
+                    <div className="space-y-2">
+                      <Skeleton variant="text" width={120} height={16} />
+                      <Skeleton variant="text" width={100} height={12} />
+                    </div>
+                  </TableCell>
+
+                  {/* IP */}
+                  <TableCell>
+                    <Skeleton variant="rounded" width={110} height={24} />
+                  </TableCell>
+
+                  {/* Created At */}
+                  <TableCell>
+                    <div className="flex items-center gap-2">
+                      <Skeleton variant="rounded" width={16} height={16} />
+                      <Skeleton variant="text" width={140} height={16} />
+                    </div>
+                  </TableCell>
+                </TableRow>
+              ))}
+            </TableBody>
+          </Table>
         </Card>
       </div>
     );
@@ -110,6 +174,7 @@ const AuditLogsPage = (): JSX.Element => {
             <TableRow>
               <TableHead>Admin</TableHead>
               <TableHead>Action</TableHead>
+              <TableHead>Description</TableHead>
               <TableHead>Target</TableHead>
               <TableHead>IP Address</TableHead>
               <TableHead>Date</TableHead>
@@ -137,6 +202,14 @@ const AuditLogsPage = (): JSX.Element => {
                     </div>
                   </TableCell>
                   <TableCell>{getActionBadge(log.action)}</TableCell>
+                  <TableCell className="max-w-xs">
+                    <p
+                      className="truncate text-sm font-medium text-gray-900 dark:text-white"
+                      title={log.description}
+                    >
+                      {log.description}
+                    </p>
+                  </TableCell>
                   <TableCell>
                     <div>
                       <p className="text-sm font-medium text-gray-900 dark:text-white">

@@ -82,9 +82,79 @@ const TestimonialsPage = (): JSX.Element => {
   if (isLoading && !data) {
     return (
       <div className="animate-fade-in space-y-6">
-        <Skeleton variant="text" width="250px" height={40} />
+        {/* Header Skeleton */}
+        <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+          <div className="space-y-2">
+            <Skeleton variant="text" width={220} height={32} />
+            <Skeleton variant="text" width={320} height={18} />
+          </div>
+
+          <Skeleton variant="rectangular" width={160} height={40} className="rounded-xl" />
+        </div>
+
+        {/* Table Skeleton */}
         <Card>
-          <Skeleton variant="rectangular" width="100%" height={400} />
+          <Table>
+            <TableHeader>
+              <TableRow>
+                <TableHeader>
+                  <TableRow>
+                    <TableHead>Customer</TableHead>
+                    <TableHead>Role</TableHead>
+                    <TableHead>Review</TableHead>
+                    <TableHead align="right">Actions</TableHead>
+                  </TableRow>
+                </TableHeader>
+              </TableRow>
+            </TableHeader>
+
+            <TableBody>
+              {Array.from({ length: 5 }).map((_, index) => (
+                <TableRow key={index}>
+                  {/* Customer Column */}
+                  <TableCell>
+                    <div className="flex items-center gap-3">
+                      <Skeleton
+                        variant="rectangular"
+                        width={40}
+                        height={40}
+                        className="rounded-xl"
+                      />
+                      <Skeleton variant="text" width={140} height={18} />
+                    </div>
+                  </TableCell>
+
+                  {/* Role Column */}
+                  <TableCell>
+                    <Skeleton variant="text" width={120} height={18} />
+                  </TableCell>
+
+                  {/* Review Column */}
+                  <TableCell>
+                    <Skeleton variant="text" width="80%" height={18} />
+                  </TableCell>
+
+                  {/* Actions Column */}
+                  <TableCell align="right">
+                    <div className="flex justify-end gap-2">
+                      <Skeleton
+                        variant="rectangular"
+                        width={32}
+                        height={32}
+                        className="rounded-md"
+                      />
+                      <Skeleton
+                        variant="rectangular"
+                        width={32}
+                        height={32}
+                        className="rounded-md"
+                      />
+                    </div>
+                  </TableCell>
+                </TableRow>
+              ))}
+            </TableBody>
+          </Table>
         </Card>
       </div>
     );

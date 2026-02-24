@@ -46,6 +46,7 @@ export interface AuditLogDto {
   ipAddress?: string;
   userAgent?: string;
   createdAt: string;
+  description?: string;
 }
 
 export interface AuditLogQueryParams {

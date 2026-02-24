@@ -103,9 +103,85 @@ const AuctionsPage = (): JSX.Element => {
   if (isLoading && !data) {
     return (
       <div className="animate-fade-in space-y-6">
-        <Skeleton variant="text" width="250px" height={40} />
+        {/* Header */}
+        <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+          <div className="space-y-2">
+            <Skeleton variant="text" width={220} height={32} />
+            <Skeleton variant="text" width={320} height={18} />
+          </div>
+          <Skeleton variant="rounded" width={170} height={40} />
+        </div>
+
+        {/* Filters */}
         <Card>
-          <Skeleton variant="rectangular" width="100%" height={400} />
+          <div className="flex flex-col gap-4 sm:flex-row">
+            <Skeleton variant="rounded" width="100%" height={40} />
+            <Skeleton variant="rounded" width={180} height={40} />
+            <Skeleton variant="rounded" width={40} height={40} />
+          </div>
+        </Card>
+
+        {/* Table */}
+        <Card>
+          <Table>
+            <TableHeader>
+              <TableRow>
+                {Array.from({ length: 6 }).map((_, i) => (
+                  <TableHead key={i}>
+                    <Skeleton variant="text" width="60%" height={16} />
+                  </TableHead>
+                ))}
+              </TableRow>
+            </TableHeader>
+
+            <TableBody>
+              {Array.from({ length: 5 }).map((_, rowIndex) => (
+                <TableRow key={rowIndex} className="h-16">
+                  {/* Auction */}
+                  <TableCell>
+                    <div className="flex items-center gap-3">
+                      <Skeleton variant="rounded" width={40} height={40} />
+                      <Skeleton variant="text" width={160} height={18} />
+                    </div>
+                  </TableCell>
+
+                  {/* Type */}
+                  <TableCell>
+                    <Skeleton variant="rounded" width={80} height={24} />
+                  </TableCell>
+
+                  {/* Start Date */}
+                  <TableCell>
+                    <div className="flex items-center gap-2">
+                      <Skeleton variant="rounded" width={16} height={16} />
+                      <Skeleton variant="text" width={100} height={16} />
+                    </div>
+                  </TableCell>
+
+                  {/* End Date */}
+                  <TableCell>
+                    <div className="flex items-center gap-2">
+                      <Skeleton variant="rounded" width={16} height={16} />
+                      <Skeleton variant="text" width={100} height={16} />
+                    </div>
+                  </TableCell>
+
+                  {/* Status */}
+                  <TableCell>
+                    <Skeleton variant="rounded" width={90} height={24} />
+                  </TableCell>
+
+                  {/* Actions */}
+                  <TableCell align="right">
+                    <div className="flex justify-end gap-2">
+                      <Skeleton variant="rounded" width={32} height={32} />
+                      <Skeleton variant="rounded" width={32} height={32} />
+                    </div>
+                  </TableCell>
+                </TableRow>
+              ))}
+            </TableBody>
+          </Table>
         </Card>
       </div>
     );

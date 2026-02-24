@@ -13,8 +13,8 @@ export const notificationApi = {
    */
   getNotifications: async (
     params: NotificationQueryParams = {},
-  ): Promise<PaginatedResponseDto<NotificationDto>> => {
-    const response = await axiosInstance.get<PaginatedResponseDto<NotificationDto>>(
+  ): Promise<ApiResponse<PaginatedResponseDto<NotificationDto>>> => {
+    const response = await axiosInstance.get<ApiResponse<PaginatedResponseDto<NotificationDto>>>(
       '/admin/notifications',
       { params },
     );

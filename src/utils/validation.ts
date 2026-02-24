@@ -391,23 +391,27 @@ export const staticPageSchema = yup.object({
 // ===========================
 
 export const notificationSchema = yup.object({
-  type: yup
-    .string()
-    .required('Type is required')
-    .oneOf(['info', 'warning', 'error', 'success'], 'Invalid notification type'),
+  type: yup.string().trim().required('Type is required'),
+  // .oneOf(['info', 'warning', 'error', 'success'], 'Invalid notification type'),
   title: yup
     .string()
+    .trim()
     .required('Title is required')
     .min(3, 'Title must be at least 3 characters')
-    .max(100, 'Title must not exceed 100 characters')
-    .trim(),
+    .max(100, 'Title must not exceed 100 characters'),
+  subject: yup
+    .string()
+    .trim()
+    .required('Subject is required')
+    .min(10, 'Subject must be at least 10 characters')
+    .max(100, 'Subject must not exceed 100 characters'),
   message: yup
     .string()
+    .trim()
     .required('Message is required')
     .min(10, 'Message must be at least 10 characters')
-    .max(500, 'Message must not exceed 500 characters')
-    .trim(),
-  userIds: yup
+    .max(500, 'Message must not exceed 500 characters'),
+  recipientIds: yup
     .array()
     .of(yup.string().required())
     .min(1, 'At least one user must be selected')

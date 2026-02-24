@@ -11,7 +11,7 @@ export const useAuditLogs = (
   return useQuery<ApiResponse<PaginatedResponseDto<AuditLogDto>>>({
     queryKey: ['audit-logs', params],
     queryFn: () => auditApi.getAuditLogs(params),
-    refetchOnMount:true,
-    staleTime:0
+    refetchOnMount: true,
+    staleTime: 0,
   });
 };

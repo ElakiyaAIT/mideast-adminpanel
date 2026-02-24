@@ -16,21 +16,31 @@ import {
   Select,
 } from '../../components';
 import { RefreshCw, Bell, Send } from 'lucide-react';
-import { useNotifications, useSendNotification } from '../../hooks/queries';
-import type { NotificationQueryParams, NotificationDto, SendNotificationDto } from '../../dto';
+import { useNotifications, useSendNotification, useUsersList } from '../../hooks/queries';
+import type {
+  NotificationQueryParams,
+  NotificationDto,
+  SendNotificationDto,
+  UserListQueryParams,
+} from '../../dto';
 import { NotificationStatusType, NotificationTypeType } from '../../dto';
 import type { NotificationStatus, NotificationType } from '../../dto';
+import { notificationSchema } from '../../utils/validation';
+import ReactSelect from 'react-select';
+import { ValidationError } from 'yup';
 
 const NotificationsPage = (): JSX.Element => {
   const [page, setPage] = useState(1);
   const [limit] = useState(10);
   const [isSendModalOpen, setIsSendModalOpen] = useState(false);
+  const [errors, setErrors] = useState<Record<string, string>>({});
 
   const [formData, setFormData] = useState<SendNotificationDto>({
-    userIds: [],
-    type: NotificationTypeType.SYSTEM,
+    recipientIds: [],
+    type: NotificationTypeType.EMAIL,
     title: '',
     message: '',
+    subject: '',
   });
 
   const queryParams = useMemo(
@@ -41,23 +51,67 @@ const NotificationsPage = (): JSX.Element => {
     [page, limit],
   );
 
+  // const sortBy = 'createdAt';
+  // const sortOrder = 'desc';
+  const userQueryParams = useMemo(
+    (): UserListQueryParams => ({
+      page,
+      limit,
+      // search: debouncedSearch || undefined,
+      sortBy: 'createdAt',
+      sortOrder: 'desc',
+    }),
+    [page, limit],
+  );
+  const {
+    data: userData,
+    // isLoading: userIsLoading,
+    // isFetching: userIsFetching,
+    // isError,
+    // error,
+    // refetch: userRefetch,
+  } = useUsersList(userQueryParams);
   const { data, isLoading, isFetching, refetch } = useNotifications(queryParams);
   const sendMutation = useSendNotification();
 
+  const users = userData?.items || [];
+  // console.log(userData, 'user123');
+
   const handleSend = (): void => {
     setFormData({
-      userIds: [],
-      type: NotificationTypeType.SYSTEM,
+      recipientIds: [],
+      type: NotificationTypeType.EMAIL,
       title: '',
       message: '',
+      subject: '',
     });
     setIsSendModalOpen(true);
   };
 
   const handleFormSubmit = async (e: React.FormEvent): Promise<void> => {
     e.preventDefault();
-    await sendMutation.mutateAsync(formData);
-    setIsSendModalOpen(false);
+    try {
+      setErrors({});
+
+      await notificationSchema.validate(formData, {
+        abortEarly: false, // collect all errors
+      });
+
+      await sendMutation.mutateAsync(formData);
+      setIsSendModalOpen(false);
+    } catch (error) {
+      if (error instanceof ValidationError) {
+        const validationErrors: Record<string, string> = {};
+
+        error.inner.forEach((err) => {
+          if (err.path && !validationErrors[err.path]) {
+            validationErrors[err.path] = err.message;
+          }
+        });
+
+        setErrors(validationErrors);
+      }
+    }
   };
 
   const getStatusBadge = (status: NotificationStatus) => {
@@ -84,9 +138,13 @@ const NotificationsPage = (): JSX.Element => {
     );
   }
 
-  const notifications = data?.items || [];
-  const total = data?.pagination?.total || 0;
-  const totalPages = data?.pagination?.totalPages || 1;
+  const userOptions = users.map((user) => ({
+    value: user.id,
+    label: `${user.firstName} ${user.lastName} (${user.email})`,
+  }));
+  const notifications = data?.data?.items || [];
+  const total = data?.data?.pagination?.total || 0;
+  const totalPages = data?.data?.pagination?.totalPages || 1;
 
   return (
     <div className="animate-fade-in space-y-6">
@@ -183,7 +241,9 @@ const NotificationsPage = (): JSX.Element => {
       >
         <form onSubmit={handleFormSubmit} className="space-y-4">
           <div>
-            <label className="mb-2 block text-sm font-medium">Type *</label>
+            <label className="mb-2 block text-sm font-medium">
+              Type <span className="text-xs text-red-500">*</span>
+            </label>
             <Select
               value={formData.type}
               onChange={(e) =>
@@ -195,11 +255,41 @@ const NotificationsPage = (): JSX.Element => {
               }))}
               required
             />
+            {errors.type && <p className="mt-1 text-xs text-red-500">{errors.type}</p>}
           </div>
 
           <div>
-            <label className="mb-2 block text-sm font-medium">Title *</label>
+            <label className="mb-2 block text-sm font-medium">
+              Select User <span className="text-xs text-red-500">*</span>
+            </label>
+            <ReactSelect
+              isMulti
+              options={userOptions}
+              value={userOptions.filter((option) =>
+                (formData?.recipientIds ?? []).includes(option.value),
+              )}
+              onChange={(selectedOptions) =>
+                setFormData({
+                  ...formData,
+                  recipientIds: selectedOptions
+                    ? selectedOptions.map((option) => option.value)
+                    : [],
+                })
+              }
+              className="react-select-container rounded-xl"
+              classNamePrefix="react-select"
+            />
+
+            {errors.recipientIds && (
+              <p className="mt-1 text-xs text-red-500">{errors.recipientIds}</p>
+            )}
+          </div>
+
+          <div>
+            {/* <label className="mb-2 block text-sm font-medium">Title *</label> */}
             <Input
+              label="Title"
+              error={errors?.title}
               type="text"
               value={formData.title}
               onChange={(e) => setFormData({ ...formData, title: e.target.value })}
@@ -208,14 +298,29 @@ const NotificationsPage = (): JSX.Element => {
           </div>
 
           <div>
-            <label className="mb-2 block text-sm font-medium">Message *</label>
+            {/* <label className="mb-2 block text-sm font-medium">Title *</label> */}
+            <Input
+              label="Subject"
+              error={errors?.subject}
+              type="text"
+              value={formData.subject}
+              onChange={(e) => setFormData({ ...formData, subject: e.target.value })}
+              required
+            />
+          </div>
+
+          <div>
+            <label className="mb-2 block text-sm font-medium">
+              Message <span className="text-xs text-red-500">*</span>
+            </label>
             <textarea
               value={formData.message}
               onChange={(e) => setFormData({ ...formData, message: e.target.value })}
               className="w-full rounded-lg border p-2 dark:border-gray-600 dark:bg-gray-800"
               rows={4}
-              required
+              // required
             />
+            {errors.message && <p className="mt-1 text-xs text-red-500">{errors.message}</p>}
           </div>
 
           <div className="flex gap-3">
