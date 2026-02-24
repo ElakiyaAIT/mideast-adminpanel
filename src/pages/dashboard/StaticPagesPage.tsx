@@ -9,7 +9,6 @@ import {
   TableCell,
   Badge,
   Button,
-  Skeleton,
   Modal,
   Input,
   Checkbox,
@@ -25,6 +24,8 @@ import {
 import type { StaticPageDto, CreateStaticPageDto, UpdateStaticPageDto } from '../../dto';
 import { staticPageSchema } from '../../utils/validation';
 import { ValidationError } from 'yup';
+import type { ColumnConfig } from '../../components/Skeleton/TableSkeleton';
+import TableSkeleton from '../../components/Skeleton/TableSkeleton';
 
 const StaticPagesPage = (): JSX.Element => {
   const [isFormModalOpen, setIsFormModalOpen] = useState(false);
@@ -33,6 +34,15 @@ const StaticPagesPage = (): JSX.Element => {
   const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false);
   const [pageToDelete, setPageToDelete] = useState<string | null>(null);
   const [errors, setErrors] = useState<Record<string, string>>({});
+
+  // Skeleton Column Config
+  const StaticPagesColumns: ColumnConfig[] = [
+    { width: 150 }, // Title
+    { width: 80, variant: 'rounded' }, //Slug
+    { width: 80, variant: 'rounded' }, // Status
+    { width: 100 }, // Last Updated
+    { width: 60, horizontalCount: 2, variant: 'rounded' },
+  ];
 
   const [formData, setFormData] = useState<CreateStaticPageDto>({
     title: '',
@@ -149,13 +159,11 @@ const StaticPagesPage = (): JSX.Element => {
     }
   };
 
+  //loading skeleton
   if (isLoading && !data) {
     return (
       <div className="animate-fade-in space-y-6">
-        <Skeleton variant="text" width="250px" height={40} />
-        <Card>
-          <Skeleton variant="rectangular" width="100%" height={400} />
-        </Card>
+        <TableSkeleton columns={StaticPagesColumns} rows={5} cardWrapper={true} />
       </div>
     );
   }

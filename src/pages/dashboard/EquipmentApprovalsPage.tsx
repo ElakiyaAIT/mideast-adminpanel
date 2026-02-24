@@ -8,7 +8,6 @@ import {
   TableHead,
   TableCell,
   Button,
-  Skeleton,
   Pagination,
   Checkbox,
   PromptDialog,
@@ -22,6 +21,8 @@ import {
 } from '../../hooks/queries';
 import type { EquipmentDto } from '../../dto';
 import { formatCurrency } from '../../utils';
+import type { ColumnConfig } from '../../components/Skeleton/TableSkeleton';
+import TableSkeleton from '../../components/Skeleton/TableSkeleton';
 
 const EquipmentApprovalsPage = (): JSX.Element => {
   const [page, setPage] = useState(1);
@@ -29,6 +30,16 @@ const EquipmentApprovalsPage = (): JSX.Element => {
   const [selectedIds, setSelectedIds] = useState<string[]>([]);
   const [isRejectDialogOpen, setIsRejectDialogOpen] = useState(false);
   const [equipmentToReject, setEquipmentToReject] = useState<string | null>(null);
+
+  // Skeleton Column Config
+  const equipmentColumns: ColumnConfig[] = [
+    { width: 30 }, // Checkbox
+    { width: 100, count: 2 }, // Equipment: title + make
+    { width: 120 }, // Category
+    { width: 100 }, // Price
+    { width: 150 }, // Seller
+    { width: 60, horizontalCount: 2, variant: 'rounded' }, // Actions: 2 buttons
+  ];
 
   const { data, isLoading, isFetching, refetch } = usePendingApprovals(page, limit);
   const approveMutation = useApproveEquipment();
@@ -89,13 +100,11 @@ const EquipmentApprovalsPage = (): JSX.Element => {
     setSelectedIds([]);
   };
 
+  //loading skeleton
   if (isLoading && !data) {
     return (
-      <div className="animate-fade-in space-y-6">
-        <Skeleton variant="text" width="250px" height={40} />
-        <Card>
-          <Skeleton variant="rectangular" width="100%" height={400} />
-        </Card>
+      <div className="mt-10 animate-fade-in space-y-6">
+        <TableSkeleton columns={equipmentColumns} rows={5} cardWrapper={true} />;
       </div>
     );
   }

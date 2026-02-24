@@ -9,7 +9,6 @@ import {
   TableCell,
   Badge,
   Button,
-  Skeleton,
   Pagination,
   Modal,
   Input,
@@ -28,12 +27,22 @@ import type { NotificationStatus, NotificationType } from '../../dto';
 import { notificationSchema } from '../../utils/validation';
 import ReactSelect from 'react-select';
 import { ValidationError } from 'yup';
+import type { ColumnConfig } from '../../components/Skeleton/TableSkeleton';
+import TableSkeleton from '../../components/Skeleton/TableSkeleton';
 
 const NotificationsPage = (): JSX.Element => {
   const [page, setPage] = useState(1);
   const [limit] = useState(10);
   const [isSendModalOpen, setIsSendModalOpen] = useState(false);
   const [errors, setErrors] = useState<Record<string, string>>({});
+
+  // Skeleton Column Config
+  const notificationColumns: ColumnConfig[] = [
+    { width: 150 }, // Notification
+    { width: 80, variant: 'rounded' }, // Type
+    { width: 100, variant: 'rounded' }, // Status
+    { width: 200 }, // SentAt
+  ];
 
   const [formData, setFormData] = useState<SendNotificationDto>({
     recipientIds: [],
@@ -127,13 +136,11 @@ const NotificationsPage = (): JSX.Element => {
     );
   };
 
+  //loading skeleton
   if (isLoading && !data) {
     return (
-      <div className="animate-fade-in space-y-6">
-        <Skeleton variant="text" width="250px" height={40} />
-        <Card>
-          <Skeleton variant="rectangular" width="100%" height={400} />
-        </Card>
+      <div className="mt-10 animate-fade-in space-y-6">
+        <TableSkeleton columns={notificationColumns} rows={5} cardWrapper={true} />
       </div>
     );
   }

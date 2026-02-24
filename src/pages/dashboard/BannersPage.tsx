@@ -11,7 +11,6 @@ import {
   TableCell,
   Badge,
   Button,
-  Skeleton,
   Modal,
   Input,
   Select,
@@ -25,6 +24,8 @@ import type { BannerStatus } from '../../dto';
 import { BannerPositionType, BannerStatusType } from '../../dto';
 import { bannerSchema, type BannerFormData } from '../../utils/validation';
 import { bannerApi } from '../../api/cmsApi';
+import type { ColumnConfig } from '../../components/Skeleton/TableSkeleton';
+import TableSkeleton from '../../components/Skeleton/TableSkeleton';
 
 const BannersPage = (): JSX.Element => {
   const [isFormModalOpen, setIsFormModalOpen] = useState(false);
@@ -36,6 +37,15 @@ const BannersPage = (): JSX.Element => {
   const [existingImage, setExistingImage] = useState<string | null>(null);
   const [isUploading, setIsUploading] = useState(false);
 
+  //Skeleton column config
+  const bannerColumns: ColumnConfig[] = [
+    { width: 150 }, // title
+    { width: 80, variant: 'rounded' }, // Position
+    { width: 100, variant: 'rounded' }, // Status
+    { width: 100 }, // Order
+    { width: 100 }, // Clicks
+    { width: 60, horizontalCount: 2, variant: 'rounded' }, // Actions
+  ];
   const { data, isLoading, isFetching, refetch } = useBanners();
   const createMutation = useCreateBanner();
   const updateMutation = useUpdateBanner();
@@ -170,60 +180,12 @@ const BannersPage = (): JSX.Element => {
       </Badge>
     );
   };
+
+  //loading skeleton
   if (isLoading && !data) {
     return (
-      <div className="animate-fade-in space-y-6">
-        <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
-          <div>
-            <Skeleton variant="text" width={220} height={32} />
-            <Skeleton variant="text" width={320} height={18} />
-          </div>
-          <div className="flex gap-2">
-            <Skeleton variant="rectangular" width={120} height={32} />
-            <Skeleton variant="rectangular" width={32} height={32} />
-          </div>
-        </div>
-        <Card>
-          <Table>
-            <TableHeader>
-              <TableRow>
-                <TableHead>Title</TableHead>
-                <TableHead>Position</TableHead>
-                <TableHead>Status</TableHead>
-                <TableHead>Order</TableHead>
-                <TableHead>Clicks</TableHead>
-                <TableHead align="right">Actions</TableHead>
-              </TableRow>
-            </TableHeader>
-            <TableBody>
-              {Array.from({ length: 5 }).map((_, index) => (
-                <TableRow key={index} className="h-16">
-                  <TableCell>
-                    <Skeleton variant="text" width={140} height={16} />
-                  </TableCell>
-                  <TableCell>
-                    <Skeleton variant="text" width={100} height={16} />
-                  </TableCell>
-                  <TableCell>
-                    <Skeleton variant="text" width={80} height={16} />
-                  </TableCell>
-                  <TableCell>
-                    <Skeleton variant="text" width={60} height={16} />
-                  </TableCell>
-                  <TableCell>
-                    <Skeleton variant="text" width={60} height={16} />
-                  </TableCell>
-                  <TableCell align="right">
-                    <div className="flex items-center justify-end gap-2">
-                      <Skeleton variant="rectangular" width={32} height={32} />
-                      <Skeleton variant="rectangular" width={32} height={32} />
-                    </div>
-                  </TableCell>
-                </TableRow>
-              ))}
-            </TableBody>
-          </Table>
-        </Card>
+      <div className="mt-10 animate-fade-in space-y-6">
+        <TableSkeleton columns={bannerColumns} rows={5} cardWrapper={true} />;
       </div>
     );
   }

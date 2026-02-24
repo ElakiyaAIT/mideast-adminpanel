@@ -10,7 +10,6 @@ import {
   Badge,
   Button,
   Input,
-  Skeleton,
   Pagination,
   Select,
   ConfirmDialog,
@@ -23,6 +22,8 @@ import { EquipmentStatusType } from '../../dto';
 import type { EquipmentStatus } from '../../dto';
 import { formatCurrency } from '../../utils';
 import EquipmentFormModal from './components/EquipmentFormModal';
+import type { ColumnConfig } from '../../components/Skeleton/TableSkeleton';
+import TableSkeleton from '../../components/Skeleton/TableSkeleton';
 
 const EquipmentPage = (): JSX.Element => {
   const [page, setPage] = useState(1);
@@ -36,6 +37,16 @@ const EquipmentPage = (): JSX.Element => {
   const [selectedEquipment, setSelectedEquipment] = useState<EquipmentDto | null>(null);
   const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false);
   const [equipmentToDelete, setEquipmentToDelete] = useState<string | null>(null);
+
+  // Skeleton Column Config
+  const equipmentColumns: ColumnConfig[] = [
+    { width: 100 }, // Eqipment
+    { width: 100 }, // Category
+    { width: 100 }, //Price
+    { width: 100 }, //Status
+    { width: 150 }, // Seller
+    { width: 60, horizontalCount: 2, variant: 'rounded' }, // Actions: 2 buttons
+  ];
 
   const debouncedSearch = useDebounce(searchTerm, 500);
 
@@ -112,11 +123,8 @@ const EquipmentPage = (): JSX.Element => {
 
   if (isLoading && !data) {
     return (
-      <div className="animate-fade-in space-y-6">
-        <Skeleton variant="text" width="250px" height={40} />
-        <Card>
-          <Skeleton variant="rectangular" width="100%" height={400} />
-        </Card>
+      <div className="mt-10 animate-fade-in space-y-6">
+        <TableSkeleton columns={equipmentColumns} rows={5} cardWrapper={true} />
       </div>
     );
   }

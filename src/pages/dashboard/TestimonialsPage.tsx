@@ -8,7 +8,6 @@ import {
   TableHead,
   TableCell,
   Button,
-  Skeleton,
   Pagination,
   ConfirmDialog,
 } from '../../components';
@@ -19,6 +18,8 @@ import { MessageSquareQuote, Plus, Edit, Trash2 } from 'lucide-react';
 import type { TestimonialDto, FilterTestimonialDto } from '../../dto/testimonial.dto';
 import { useTestimonials, useDeleteTestimonial } from '../../hooks/queries/useTestimonial';
 import TestimonialFormModal from './components/TestimonialFormModal';
+import type { ColumnConfig } from '../../components/Skeleton/TableSkeleton';
+import TableSkeleton from '../../components/Skeleton/TableSkeleton';
 
 const TestimonialsPage = (): JSX.Element => {
   const [page, setPage] = useState(1);
@@ -31,6 +32,14 @@ const TestimonialsPage = (): JSX.Element => {
 
   const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false);
   const [testimonialToDelete, setTestimonialToDelete] = useState<string | null>(null);
+
+  // Skeleton Column Config
+  const testimonialColumns: ColumnConfig[] = [
+    { width: 150 }, // Customer
+    { width: 80 }, // Role
+    { width: 100, variant: 'rounded' }, // Review
+    { width: 60, horizontalCount: 2, variant: 'rounded' }, // Actions
+  ];
 
   // const debouncedSearch = useDebounce(searchTerm, 500);
   const search = '';
@@ -79,83 +88,11 @@ const TestimonialsPage = (): JSX.Element => {
     setSelectedTestimonial(null);
   };
 
+  //loading skeleton
   if (isLoading && !data) {
     return (
-      <div className="animate-fade-in space-y-6">
-        {/* Header Skeleton */}
-        <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
-          <div className="space-y-2">
-            <Skeleton variant="text" width={220} height={32} />
-            <Skeleton variant="text" width={320} height={18} />
-          </div>
-
-          <Skeleton variant="rectangular" width={160} height={40} className="rounded-xl" />
-        </div>
-
-        {/* Table Skeleton */}
-        <Card>
-          <Table>
-            <TableHeader>
-              <TableRow>
-                <TableHeader>
-                  <TableRow>
-                    <TableHead>Customer</TableHead>
-                    <TableHead>Role</TableHead>
-                    <TableHead>Review</TableHead>
-                    <TableHead align="right">Actions</TableHead>
-                  </TableRow>
-                </TableHeader>
-              </TableRow>
-            </TableHeader>
-
-            <TableBody>
-              {Array.from({ length: 5 }).map((_, index) => (
-                <TableRow key={index}>
-                  {/* Customer Column */}
-                  <TableCell>
-                    <div className="flex items-center gap-3">
-                      <Skeleton
-                        variant="rectangular"
-                        width={40}
-                        height={40}
-                        className="rounded-xl"
-                      />
-                      <Skeleton variant="text" width={140} height={18} />
-                    </div>
-                  </TableCell>
-
-                  {/* Role Column */}
-                  <TableCell>
-                    <Skeleton variant="text" width={120} height={18} />
-                  </TableCell>
-
-                  {/* Review Column */}
-                  <TableCell>
-                    <Skeleton variant="text" width="80%" height={18} />
-                  </TableCell>
-
-                  {/* Actions Column */}
-                  <TableCell align="right">
-                    <div className="flex justify-end gap-2">
-                      <Skeleton
-                        variant="rectangular"
-                        width={32}
-                        height={32}
-                        className="rounded-md"
-                      />
-                      <Skeleton
-                        variant="rectangular"
-                        width={32}
-                        height={32}
-                        className="rounded-md"
-                      />
-                    </div>
-                  </TableCell>
-                </TableRow>
-              ))}
-            </TableBody>
-          </Table>
-        </Card>
+      <div className="mt-10 animate-fade-in space-y-6">
+        <TableSkeleton columns={testimonialColumns} rows={5} cardWrapper={true} />
       </div>
     );
   }

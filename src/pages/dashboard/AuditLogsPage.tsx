@@ -9,7 +9,6 @@ import {
   TableCell,
   Badge,
   Button,
-  Skeleton,
   Pagination,
   Select,
 } from '../../components';
@@ -18,11 +17,23 @@ import { useAuditLogs } from '../../hooks/queries';
 import type { AuditLogQueryParams, AuditLogDto } from '../../dto';
 import type { AuditAction } from '../../dto';
 import { AuditActionType } from '../../dto';
+import type { ColumnConfig } from '../../components/Skeleton/TableSkeleton';
+import TableSkeleton from '../../components/Skeleton/TableSkeleton';
 
 const AuditLogsPage = (): JSX.Element => {
   const [page, setPage] = useState(1);
   const [limit] = useState(20);
   const [actionFilter, setActionFilter] = useState<AuditAction | ''>('');
+
+  // Skeleton Column Config
+  const auditLogColumns: ColumnConfig[] = [
+    { width: 250, count: 2 }, // Admin: name + email
+    { width: 120, variant: 'rounded' }, // Action: badge style
+    { width: 400 }, // Description
+    { width: 250, count: 2 }, // Target: type + id
+    { width: 150 }, // IP Address
+    { width: 200 }, // Date
+  ];
 
   const queryParams = useMemo(
     (): AuditLogQueryParams => ({
@@ -59,77 +70,11 @@ const AuditLogsPage = (): JSX.Element => {
     );
   };
 
+  //loading skeleton
   if (isLoading && !data) {
     return (
-      <div className="animate-fade-in space-y-6">
-        <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
-          <div className="space-y-2">
-            <Skeleton variant="text" width={220} height={32} />
-            <Skeleton variant="text" width={320} height={18} />
-          </div>
-          <div className="flex gap-2">
-            <Skeleton variant="rectangular" width={120} height={32} />
-            <Skeleton variant="rectangular" width={32} height={32} />
-          </div>
-        </div>
-        <Card>
-          <Table>
-            <TableHeader>
-              <TableRow>
-                <TableHead>Admin</TableHead>
-                <TableHead>Action</TableHead>
-                <TableHead>Description</TableHead>
-                <TableHead>Target</TableHead>
-                <TableHead>IP Address</TableHead>
-                <TableHead>Date</TableHead>
-              </TableRow>
-            </TableHeader>
-            <TableBody>
-              {Array.from({ length: 5 }).map((_, index) => (
-                <TableRow key={index} className="h-16">
-                  {/* Admin */}
-                  <TableCell>
-                    <div className="space-y-2">
-                      <Skeleton variant="text" width={140} height={16} />
-                      <Skeleton variant="text" width={180} height={12} />
-                    </div>
-                  </TableCell>
-
-                  {/* Action */}
-                  <TableCell>
-                    <Skeleton variant="rounded" width={90} height={24} />
-                  </TableCell>
-
-                  {/* Description */}
-                  <TableCell className="max-w-xs">
-                    <Skeleton variant="text" width="90%" height={16} />
-                  </TableCell>
-
-                  {/* Target */}
-                  <TableCell>
-                    <div className="space-y-2">
-                      <Skeleton variant="text" width={120} height={16} />
-                      <Skeleton variant="text" width={100} height={12} />
-                    </div>
-                  </TableCell>
-
-                  {/* IP */}
-                  <TableCell>
-                    <Skeleton variant="rounded" width={110} height={24} />
-                  </TableCell>
-
-                  {/* Created At */}
-                  <TableCell>
-                    <div className="flex items-center gap-2">
-                      <Skeleton variant="rounded" width={16} height={16} />
-                      <Skeleton variant="text" width={140} height={16} />
-                    </div>
-                  </TableCell>
-                </TableRow>
-              ))}
-            </TableBody>
-          </Table>
-        </Card>
+      <div className="mt-10">
+        <TableSkeleton columns={auditLogColumns} rows={5} cardWrapper={true} />
       </div>
     );
   }

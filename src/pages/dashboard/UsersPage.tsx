@@ -10,7 +10,6 @@ import {
   Badge,
   Button,
   Input,
-  Skeleton,
   Pagination,
 } from '../../components';
 import { Plus, Edit, Trash2, Search, RefreshCw } from 'lucide-react';
@@ -19,6 +18,8 @@ import { useDebounce } from '../../hooks/useDebounce';
 import type { UserListQueryParams, UserResponseDto } from '../../dto';
 import UserFormModal from './components/UserFormModal';
 import DeleteUserModal from './components/DeleteUserModal';
+import type { ColumnConfig } from '../../components/Skeleton/TableSkeleton';
+import TableSkeleton from '../../components/Skeleton/TableSkeleton';
 
 const UsersPage = (): JSX.Element => {
   const [page, setPage] = useState(1);
@@ -32,6 +33,16 @@ const UsersPage = (): JSX.Element => {
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
   const [selectedUser, setSelectedUser] = useState<UserResponseDto | null>(null);
+
+  //Skelton column config
+  const UserColumns: ColumnConfig[] = [
+    { width: 150, count: 2 }, // user
+    { width: 150 }, // email
+    { width: 100, variant: 'rounded' }, // role
+    { width: 100, variant: 'rounded' }, // status
+    { width: 90, variant: 'rounded' }, // last login
+    { width: 60, horizontalCount: 2, variant: 'rounded' }, // Actions
+  ];
 
   // Debounce search term to avoid excessive API calls
   const debouncedSearch = useDebounce(searchTerm, 500);
@@ -113,17 +124,11 @@ const UsersPage = (): JSX.Element => {
     setSelectedUser(null);
   };
 
-  // Loading skeleton (only on initial load, not pagination)
+  // Loading skeleton
   if (isLoading && !data) {
     return (
-      <div className="animate-fade-in space-y-6">
-        <div className="space-y-3">
-          <Skeleton variant="text" width="200px" height={40} />
-          <Skeleton variant="text" width="400px" height={20} />
-        </div>
-        <Card>
-          <Skeleton variant="rectangular" width="100%" height={400} className="rounded-xl" />
-        </Card>
+      <div className="mt-10 animate-fade-in space-y-6">
+        <TableSkeleton columns={UserColumns} rows={5} cardWrapper={true} />
       </div>
     );
   }

@@ -12,7 +12,6 @@ import {
   Badge,
   Button,
   Input,
-  Skeleton,
   Pagination,
   Modal,
   ConfirmDialog,
@@ -35,6 +34,8 @@ import type {
 } from '../../dto';
 import { createCategorySchema, type CreateCategoryFormData } from '../../utils/validation';
 import { equipmentCategoryApi } from '../../api/equipmentApi';
+import type { ColumnConfig } from '../../components/Skeleton/TableSkeleton';
+import TableSkeleton from '../../components/Skeleton/TableSkeleton';
 
 const EquipmentCategoriesPage = (): JSX.Element => {
   const [page, setPage] = useState(1);
@@ -54,6 +55,14 @@ const EquipmentCategoriesPage = (): JSX.Element => {
   const [existingImage, setExistingImage] = useState<string | null>(null);
   const [isUploading, setIsUploading] = useState(false);
 
+  // Skeleton Column Config
+  const equipmentCategoryColumns: ColumnConfig[] = [
+    { width: 100 }, // Category
+    { width: 100 }, // Slug
+    { width: 200 }, // Description
+    { width: 100 }, //Status
+    { width: 60, horizontalCount: 2, variant: 'rounded' }, // Actions: 2 buttons
+  ];
   // Debounce search term
   const debouncedSearch = useDebounce(searchTerm, 500);
 
@@ -194,14 +203,8 @@ const EquipmentCategoriesPage = (): JSX.Element => {
   // Loading skeleton
   if (isLoading && !data) {
     return (
-      <div className="animate-fade-in space-y-6">
-        <div className="space-y-3">
-          <Skeleton variant="text" width="250px" height={40} />
-          <Skeleton variant="text" width="400px" height={20} />
-        </div>
-        <Card>
-          <Skeleton variant="rectangular" width="100%" height={400} className="rounded-xl" />
-        </Card>
+      <div className="mt-10 animate-fade-in space-y-6">
+        <TableSkeleton columns={equipmentCategoryColumns} rows={5} cardWrapper={true} />
       </div>
     );
   }
