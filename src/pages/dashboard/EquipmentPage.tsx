@@ -222,7 +222,7 @@ const EquipmentPage = (): JSX.Element => {
                           <Package className="h-5 w-5 text-primary-600" />
                         </div>
                         <div>
-                          <p className="font-semibold text-gray-900 dark:text-white">
+                          <p className="font-semibold truncate text-gray-900 dark:text-white" title={item?.title}>
                             {item.title}
                           </p>
                           <p className="text-xs text-gray-500">{item.make}</p>
@@ -230,7 +230,7 @@ const EquipmentPage = (): JSX.Element => {
                       </div>
                     </TableCell>
                     <TableCell>
-                      <p className="text-sm text-gray-700 dark:text-gray-300">
+                      <p className="text-sm truncate text-gray-700 dark:text-gray-300" title={item?.categoryId?.name}>
                         {item.categoryId?.name || '-'}
                       </p>
                     </TableCell>
@@ -241,7 +241,7 @@ const EquipmentPage = (): JSX.Element => {
                     </TableCell>
                     <TableCell>{getStatusBadge(item.status)}</TableCell>
                     <TableCell>
-                      <p className="text-sm text-gray-700 dark:text-gray-300">
+                      <p className="text-sm truncate text-gray-700 dark:text-gray-300"title={`${item?.sellerId?.firstName} ${item?.sellerId?.lastName}`}>
                         {item.sellerId?.firstName} {item.sellerId?.lastName}
                       </p>
                     </TableCell>

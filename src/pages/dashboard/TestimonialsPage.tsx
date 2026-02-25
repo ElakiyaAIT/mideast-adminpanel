@@ -177,17 +177,20 @@ const TestimonialsPage = (): JSX.Element => {
                         )}
                       </div>
                       <div>
-                        <p className="font-semibold text-gray-900 dark:text-white">
+                        <p className="font-semibold truncate text-gray-900 dark:text-white" title={testimonial?.name}>
                           {testimonial?.name}
                         </p>
                       </div>
                     </div>
                   </TableCell>
 
-                  <TableCell>{testimonial?.role}</TableCell>
+                  <TableCell>
+                    <p className="max-w-xs truncate text-sm text-gray-600 dark:text-gray-400" title={testimonial?.role}>
+                      {testimonial?.role}
+                    </p></TableCell>
 
                   <TableCell>
-                    <p className="max-w-xs truncate text-sm text-gray-600 dark:text-gray-400">
+                    <p className="max-w-xs truncate text-sm text-gray-600 dark:text-gray-400" title={testimonial?.review}>
                       {testimonial?.review}
                     </p>
                   </TableCell>

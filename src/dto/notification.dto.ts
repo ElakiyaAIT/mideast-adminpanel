@@ -45,6 +45,7 @@ export interface NotificationDto {
   createdAt: string;
   updatedAt: string;
   createdBy?: string;
+  subject?:string;
 }
 
 export interface SendNotificationDto {
