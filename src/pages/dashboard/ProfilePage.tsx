@@ -54,7 +54,7 @@ const ProfilePage = (): JSX.Element => {
   if (isLoading && !displayProfile) {
     return (
       // <Card title={<Skeleton width={200} height={24} />}>
-      <div className="space-y-4 mt-20">
+      <div className="mt-20 space-y-4">
         {/* First Name + Last Name */}
         <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
           <Skeleton width="100%" height={40} className="rounded" />
@@ -65,7 +65,7 @@ const ProfilePage = (): JSX.Element => {
         <Skeleton width="100%" height={40} className="rounded" />
 
         {/* Role + Member since */}
-        <div className="border-t border-white/30 pt-4 dark:border-white/10 grid grid-cols-1 gap-4 sm:grid-cols-2">
+        <div className="grid grid-cols-1 gap-4 border-t border-white/30 pt-4 dark:border-white/10 sm:grid-cols-2">
           <Skeleton width="120px" height={20} /> {/* Role */}
           <Skeleton width="120px" height={20} /> {/* Member since */}
         </div>
@@ -75,7 +75,7 @@ const ProfilePage = (): JSX.Element => {
           <Skeleton width={120} height={40} className="rounded" />
         </div>
       </div>
-    // </Card>
+      // </Card>
     );
   }
 

@@ -274,7 +274,10 @@ const UsersPage = (): JSX.Element => {
                           {user.firstName?.[0]?.toUpperCase() || 'U'}
                         </div>
                         <div>
-                          <p className="font-semibold truncate text-gray-900 dark:text-white" title={`${user?.firstName} ${user?.lastName}`}>
+                          <p
+                            className="truncate font-semibold text-gray-900 dark:text-white"
+                            title={`${user?.firstName} ${user?.lastName}`}
+                          >
                             {user.firstName} {user.lastName}
                           </p>
                           <p className="text-xs text-gray-500 dark:text-gray-400">
@@ -284,7 +287,12 @@ const UsersPage = (): JSX.Element => {
                       </div>
                     </TableCell>
                     <TableCell>
-                      <p className="text-sm truncate text-gray-700 dark:text-gray-300" title={user?.email}>{user.email}</p>
+                      <p
+                        className="truncate text-sm text-gray-700 dark:text-gray-300"
+                        title={user?.email}
+                      >
+                        {user.email}
+                      </p>
                     </TableCell>
                     <TableCell>
                       <Badge variant={getRoleBadgeVariant(user.roleName)} size="sm">

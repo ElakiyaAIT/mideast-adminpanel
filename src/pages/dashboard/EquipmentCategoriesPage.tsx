@@ -302,7 +302,7 @@ const EquipmentCategoriesPage = (): JSX.Element => {
                   </td>
                 </TableRow>
               ) : (
-                categories.map((category:EquipmentCategoryDto) => (
+                categories.map((category: EquipmentCategoryDto) => (
                   <TableRow key={category._id} hover>
                     <TableCell>
                       <div className="flex items-center gap-3">
@@ -310,7 +310,10 @@ const EquipmentCategoriesPage = (): JSX.Element => {
                           <FolderTree className="h-5 w-5 text-primary-600" />
                         </div>
                         <div>
-                          <p className="font-semibold truncate text-gray-900 dark:text-white" title={category?.name}>
+                          <p
+                            className="truncate font-semibold text-gray-900 dark:text-white"
+                            title={category?.name}
+                          >
                             {category.name}
                           </p>
                         </div>
@@ -322,7 +325,10 @@ const EquipmentCategoriesPage = (): JSX.Element => {
                       </code>
                     </TableCell>
                     <TableCell>
-                      <p className="max-w-xs truncate text-sm text-gray-700 dark:text-gray-300" title={category?.description}>
+                      <p
+                        className="max-w-xs truncate text-sm text-gray-700 dark:text-gray-300"
+                        title={category?.description}
+                      >
                         {category.description || '-'}
                       </p>
                     </TableCell>

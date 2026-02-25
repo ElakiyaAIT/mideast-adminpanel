@@ -219,11 +219,19 @@ const StaticPagesPage = (): JSX.Element => {
                       <div className="flex h-10 w-10 items-center justify-center rounded-xl border">
                         <FileText className="h-5 w-5 text-primary-600" />
                       </div>
-                      <p className="font-semibold truncate text-gray-900 dark:text-white" title={page?.title}>{page.title}</p>
+                      <p
+                        className="truncate font-semibold text-gray-900 dark:text-white"
+                        title={page?.title}
+                      >
+                        {page.title}
+                      </p>
                     </div>
                   </TableCell>
                   <TableCell>
-                    <code className="rounded bg-gray-100 px-2 py-1 text-xs truncate dark:bg-gray-800" title={page?.slug}>
+                    <code
+                      className="truncate rounded bg-gray-100 px-2 py-1 text-xs dark:bg-gray-800"
+                      title={page?.slug}
+                    >
                       {page.slug}
                     </code>
                   </TableCell>

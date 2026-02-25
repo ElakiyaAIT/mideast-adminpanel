@@ -198,10 +198,16 @@ const NotificationsPage = (): JSX.Element => {
                 <TableRow key={notification._id} hover>
                   <TableCell>
                     <div>
-                      <p className="font-semibold tuncate text-gray-900 dark:text-white" title={notification?.subject}>
+                      <p
+                        className="tuncate font-semibold text-gray-900 dark:text-white"
+                        title={notification?.subject}
+                      >
                         {notification.subject}
                       </p>
-                      <p className="text-sm truncate text-gray-600 dark:text-gray-400" title={notification?.message}>
+                      <p
+                        className="truncate text-sm text-gray-600 dark:text-gray-400"
+                        title={notification?.message}
+                      >
                         {notification.message}
                       </p>
                     </div>

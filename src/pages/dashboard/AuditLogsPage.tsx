@@ -36,16 +36,16 @@ const AuditLogsPage = (): JSX.Element => {
     { width: 200 }, // Date
   ];
 
-  const formatUserAgent = (uaString?:string) => {
-  if (!uaString) return "Unknown Device";
-  
-  const parser = new UAParser(uaString);
-  const browser = parser.getBrowser(); // e.g., { name: "Chrome", version: "145.0.0.0" }
-  const os = parser.getOS();           // e.g., { name: "Windows", version: "10" }
+  const formatUserAgent = (uaString?: string) => {
+    if (!uaString) return 'Unknown Device';
 
-  // Create a human-readable string
-  return `${browser.name || 'Unknown Browser'} on ${os.name || 'Unknown OS'} ${os.version || ''}`.trim();
-};
+    const parser = new UAParser(uaString);
+    const browser = parser.getBrowser(); // e.g., { name: "Chrome", version: "145.0.0.0" }
+    const os = parser.getOS(); // e.g., { name: "Windows", version: "10" }
+
+    // Create a human-readable string
+    return `${browser.name || 'Unknown Browser'} on ${os.name || 'Unknown OS'} ${os.version || ''}`.trim();
+  };
   const queryParams = useMemo(
     (): AuditLogQueryParams => ({
       page,
@@ -152,10 +152,15 @@ const AuditLogsPage = (): JSX.Element => {
                 <TableRow key={log._id} hover>
                   <TableCell>
                     <div>
-                      <p className="font-semibold truncate text-gray-900 dark:text-white" title={`${log.adminId?.firstName} ${log.adminId?.lastName}`}>
+                      <p
+                        className="truncate font-semibold text-gray-900 dark:text-white"
+                        title={`${log.adminId?.firstName} ${log.adminId?.lastName}`}
+                      >
                         {log.adminId?.firstName} {log.adminId?.lastName}
                       </p>
-                      <p className="text-xs truncate text-gray-500" title={log?.adminId?.email}>{log.adminId?.email}</p>
+                      <p className="truncate text-xs text-gray-500" title={log?.adminId?.email}>
+                        {log.adminId?.email}
+                      </p>
                     </div>
                   </TableCell>
                   <TableCell>{getActionBadge(log.action)}</TableCell>
@@ -180,7 +185,7 @@ const AuditLogsPage = (): JSX.Element => {
                       {log.ipAddress || '-'}
                     </code>
                   </TableCell>
-                   <TableCell>
+                  <TableCell>
                     <code className="rounded bg-gray-100 px-2 py-1 text-xs dark:bg-gray-800">
                       {formatUserAgent(log?.userAgent) || '-'}
                     </code>
