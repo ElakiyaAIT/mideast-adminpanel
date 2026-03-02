@@ -6,6 +6,8 @@ import type {
   StaticPageDto,
   CreateStaticPageDto,
   UpdateStaticPageDto,
+  FilterStaticPageDto,
+  PaginatedResponseDto,
 } from '../dto';
 import type { ApiResponse } from '../dto';
 
@@ -81,9 +83,12 @@ export const staticPageApi = {
   /**
    * Get all static pages
    */
-  getPages: async (): Promise<ApiResponse<StaticPageDto[]>> => {
-    const response = await axiosInstance.get<ApiResponse<StaticPageDto[]>>('/admin/cms/pages');
-    return response.data;
+  getPages: async (filters?: FilterStaticPageDto): Promise<PaginatedResponseDto<StaticPageDto>> => {
+    const response = await axiosInstance.get<ApiResponse<PaginatedResponseDto<StaticPageDto>>>(
+      '/admin/cms/pages',
+      { params: filters },
+    );
+    return response.data.data;
   },
 
   /**

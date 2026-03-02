@@ -8,6 +8,8 @@ import type {
   CreateStaticPageDto,
   UpdateStaticPageDto,
   ApiResponse,
+  FilterStaticPageDto,
+  PaginatedResponseDto,
 } from '../../dto';
 
 // ============================================================
@@ -98,10 +100,12 @@ export const useDeleteBanner = () => {
 /**
  * Hook to fetch all static pages
  */
-export const useStaticPages = (): UseQueryResult<ApiResponse<StaticPageDto[]>> => {
-  return useQuery<ApiResponse<StaticPageDto[]>>({
-    queryKey: ['static-pages'],
-    queryFn: () => staticPageApi.getPages(),
+export const useStaticPages = (filters?: FilterStaticPageDto) => {
+  return useQuery<PaginatedResponseDto<StaticPageDto>>({
+    queryKey: ['static-pages', filters],
+    queryFn: async () => {
+      return staticPageApi.getPages(filters);
+    },
   });
 };
 

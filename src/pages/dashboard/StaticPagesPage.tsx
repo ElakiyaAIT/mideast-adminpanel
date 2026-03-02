@@ -1,4 +1,4 @@
-import React, { useState, type JSX } from 'react';
+import React, { useMemo, useState, type JSX } from 'react';
 import {
   Card,
   Table,
@@ -13,6 +13,7 @@ import {
   Input,
   Checkbox,
   ConfirmDialog,
+  Pagination,
 } from '../../components';
 import { Plus, Edit, Trash2, RefreshCw, FileText } from 'lucide-react';
 import {
@@ -21,7 +22,12 @@ import {
   useUpdateStaticPage,
   useDeleteStaticPage,
 } from '../../hooks/queries';
-import type { StaticPageDto, CreateStaticPageDto, UpdateStaticPageDto } from '../../dto';
+import type {
+  StaticPageDto,
+  CreateStaticPageDto,
+  UpdateStaticPageDto,
+  FilterStaticPageDto,
+} from '../../dto';
 import { staticPageSchema } from '../../utils/validation';
 import { ValidationError } from 'yup';
 import type { ColumnConfig } from '../../components/Skeleton/TableSkeleton';
@@ -53,8 +59,18 @@ const StaticPagesPage = (): JSX.Element => {
     metaKeywords: [],
     isPublished: true,
   });
-
-  const { data, isLoading, isFetching, refetch } = useStaticPages();
+  const [page, setPage] = useState(1);
+  const [limit] = useState(8);
+  const search = '';
+  const queryParams = useMemo(
+    (): FilterStaticPageDto => ({
+      page,
+      limit,
+      search,
+    }),
+    [page, limit, search],
+  );
+  const { data, isLoading, isFetching, refetch } = useStaticPages(queryParams);
   const createMutation = useCreateStaticPage();
   const updateMutation = useUpdateStaticPage();
   const deleteMutation = useDeleteStaticPage();
@@ -168,7 +184,9 @@ const StaticPagesPage = (): JSX.Element => {
     );
   }
 
-  const pages = data ? data.data : [];
+  const pages = data?.items || [];
+  const total = data?.pagination?.total || 0;
+  const totalPages = data?.pagination?.totalPages || 1;
 
   return (
     <div className="animate-fade-in space-y-6">
@@ -265,6 +283,20 @@ const StaticPagesPage = (): JSX.Element => {
             )}
           </TableBody>
         </Table>
+        {totalPages > 1 && (
+          <div className="mt-6 flex items-center justify-between border-t pt-4">
+            <div className="text-sm text-gray-600 dark:text-gray-400">
+              Showing {pages.length > 0 ? (page - 1) * limit + 1 : 0} to{' '}
+              {Math.min(page * limit, total)} of {total} testimonials
+            </div>
+
+            <Pagination
+              currentPage={page}
+              totalPages={totalPages}
+              onPageChange={(newPage) => setPage(newPage)}
+            />
+          </div>
+        )}
       </Card>
 
       {/* Form Modal */}

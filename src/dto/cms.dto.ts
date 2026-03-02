@@ -113,3 +113,8 @@ export interface UpdateStaticPageDto {
   metaKeywords?: string[];
   isPublished?: boolean;
 }
+export interface FilterStaticPageDto {
+  page?: number;
+  limit?: number;
+  search?: string;
+}
