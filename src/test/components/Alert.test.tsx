@@ -2,7 +2,6 @@ import { describe, it, expect, vi } from 'vitest';
 import { render, screen, fireEvent } from '@testing-library/react';
 import { Alert } from '../../components/Alert/Alert';
 
-
 describe('Alert component', () => {
   it('renders with default info variant', () => {
     render(<Alert>Info message</Alert>);

@@ -3,19 +3,28 @@ import { render, screen } from '@testing-library/react';
 import { CategoryChart } from '../../components/dashboard/CategoryChart';
 import type React from 'react';
 
-
 // Mock Recharts to just render children as plain divs
 vi.mock('recharts', () => {
+  interface PieProps<T> {
+    data: T[];
+    children: React.ReactNode;
+  }
+
+  interface CellProps {
+    fill: string;
+  }
   return {
-    PieChart: ({ children }: {children:React.ReactNode}) => <div data-testid="piechart">{children}</div>,
-    Pie: ({ data, children }: {children:React.ReactNode,data:any}) => (
+    PieChart: ({ children }: { children: React.ReactNode }) => (
+      <div data-testid="piechart">{children}</div>
+    ),
+    Pie: <T,>({ data, children }: PieProps<T>) => (
       <div data-testid="pie" data-length={data.length}>
         {children}
       </div>
     ),
-    Cell: ({ fill }: any) => <div data-testid="cell" data-fill={fill}></div>,
+    Cell: ({ fill }: CellProps) => <div data-testid="cell" data-fill={fill}></div>,
     Tooltip: () => <div data-testid="tooltip" />,
-    ResponsiveContainer: ({ children }: {children:React.ReactNode}) => <div>{children}</div>,
+    ResponsiveContainer: ({ children }: { children: React.ReactNode }) => <div>{children}</div>,
   };
 });
 

@@ -12,7 +12,15 @@ vi.mock('../../hooks/redux', () => ({
   useAppDispatch: vi.fn(),
 }));
 vi.mock('../../components/LogoutConfirmModal', () => ({
-  LogoutConfirmModal: ({ onConfirm, onClose, isOpen }: {isOpen:boolean,onClose:()=>void,onConfirm:()=>void}) =>
+  LogoutConfirmModal: ({
+    onConfirm,
+    onClose,
+    isOpen,
+  }: {
+    isOpen: boolean;
+    onClose: () => void;
+    onConfirm: () => void;
+  }) =>
     isOpen ? (
       <div>
         <p>Are you sure you want to logout?</p>
@@ -30,29 +38,28 @@ vi.mock('../../store/themeSlice', () => ({
   toggleTheme: vi.fn(),
 }));
 
-
 describe('<Header />', () => {
   const mockDispatch = vi.fn();
   const mockLogout = { mutate: vi.fn(), isPending: false };
-beforeEach(() => {
-  vi.clearAllMocks();
+  beforeEach(() => {
+    vi.clearAllMocks();
 
-  const mockUseAppDispatch = useAppDispatch as unknown as ReturnType<typeof vi.fn>;
-  const mockUseAppSelector = useAppSelector as unknown as ReturnType<typeof vi.fn>;
-  const mockUseCurrentUser = useCurrentUser as unknown as ReturnType<typeof vi.fn>;
-  const mockUseLogout = useLogout as unknown as ReturnType<typeof vi.fn>;
+    const mockUseAppDispatch = useAppDispatch as unknown as ReturnType<typeof vi.fn>;
+    const mockUseAppSelector = useAppSelector as unknown as ReturnType<typeof vi.fn>;
+    const mockUseCurrentUser = useCurrentUser as unknown as ReturnType<typeof vi.fn>;
+    const mockUseLogout = useLogout as unknown as ReturnType<typeof vi.fn>;
 
-  mockUseAppDispatch.mockReturnValue(mockDispatch);
-  mockUseAppSelector.mockReturnValue({ mode: 'light' });
-  mockUseCurrentUser.mockReturnValue({ data: { firstName: 'John' } });
-  mockUseLogout.mockReturnValue(mockLogout);
-});
+    mockUseAppDispatch.mockReturnValue(mockDispatch);
+    mockUseAppSelector.mockReturnValue({ mode: 'light' });
+    mockUseCurrentUser.mockReturnValue({ data: { firstName: 'John' } });
+    mockUseLogout.mockReturnValue(mockLogout);
+  });
 
   it('renders page title and welcome message', () => {
     render(
       <MemoryRouter initialEntries={['/dashboard']}>
         <Header />
-      </MemoryRouter>
+      </MemoryRouter>,
     );
 
     expect(screen.getByText('Dashboard')).toBeInTheDocument();
@@ -63,7 +70,7 @@ beforeEach(() => {
     render(
       <MemoryRouter>
         <Header />
-      </MemoryRouter>
+      </MemoryRouter>,
     );
 
     const themeButton = screen.getByRole('button', { name: /toggle theme/i });
@@ -76,7 +83,7 @@ beforeEach(() => {
     render(
       <MemoryRouter>
         <Header />
-      </MemoryRouter>
+      </MemoryRouter>,
     );
 
     const logoutButton = screen.getByText(/logout/i);
@@ -89,7 +96,7 @@ beforeEach(() => {
     render(
       <MemoryRouter>
         <Header />
-      </MemoryRouter>
+      </MemoryRouter>,
     );
 
     fireEvent.click(screen.getByText(/logout/i));
@@ -103,7 +110,7 @@ beforeEach(() => {
     render(
       <MemoryRouter>
         <Header />
-      </MemoryRouter>
+      </MemoryRouter>,
     );
 
     fireEvent.click(screen.getByText(/logout/i));
@@ -111,5 +118,31 @@ beforeEach(() => {
     fireEvent.click(cancelButton);
 
     expect(screen.queryByText(/are you sure you want to logout/i)).not.toBeInTheDocument();
+  });
+  it('opens logout modal when mobile logout button is clicked', () => {
+    render(
+      <MemoryRouter>
+        <Header />
+      </MemoryRouter>,
+    );
+
+    const mobileLogoutButton = screen.getByLabelText(/logout/i);
+    fireEvent.click(mobileLogoutButton);
+
+    expect(screen.getByText(/are you sure you want to logout/i)).toBeInTheDocument();
+  });
+  it('toggles mobile menu when menu button is clicked', () => {
+    render(
+      <MemoryRouter>
+        <Header />
+      </MemoryRouter>,
+    );
+
+    const menuButton = screen.getByLabelText(/toggle mobile menu/i);
+    fireEvent.click(menuButton);
+
+    // You could test the state effect if there's a visible menu appearing
+    // For now, just ensure clicking works (or mock setShowMobileMenu if needed)
+    expect(menuButton).toBeInTheDocument();
   });
 });

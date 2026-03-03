@@ -1,4 +1,4 @@
-import { describe, it, expect, vi } from 'vitest';
+import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { render, screen } from '@testing-library/react';
 
 // Mock the redux hook
@@ -10,21 +10,27 @@ import { useAppSelector } from '../../hooks/redux';
 import { GlobalLoader } from '../../components/Loader/GlobalLoader';
 
 describe('GlobalLoader', () => {
+  const mockSelector = useAppSelector as unknown as ReturnType<typeof vi.fn>;
+
+  beforeEach(() => {
+    vi.clearAllMocks();
+  });
+
   it('renders null when isLoading is false', () => {
-    (useAppSelector as any).mockImplementation(() => ({
+    mockSelector.mockReturnValue({
       isLoading: false,
       loadingMessage: '',
-    }));
+    });
 
     const { container } = render(<GlobalLoader />);
     expect(container.firstChild).toBeNull();
   });
 
   it('renders loader when isLoading is true', () => {
-    (useAppSelector as any).mockImplementation(() => ({
+    mockSelector.mockReturnValue({
       isLoading: true,
       loadingMessage: '',
-    }));
+    });
 
     render(<GlobalLoader />);
     const loader = screen.getByRole('status');
@@ -33,31 +39,31 @@ describe('GlobalLoader', () => {
     expect(loader).toHaveAttribute('aria-label', 'Loading');
   });
 
- it('renders loading message and bouncing dots if provided', () => {
-  const message = 'Please wait...';
-  (useAppSelector as any).mockImplementation(() => ({
-    isLoading: true,
-    loadingMessage: message,
-  }));
+  it('renders loading message and bouncing dots if provided', () => {
+    const message = 'Please wait...';
+    mockSelector.mockReturnValue({
+      isLoading: true,
+      loadingMessage: message,
+    });
 
-  render(<GlobalLoader />);
-  const loader = screen.getByRole('status');
-  expect(loader).toBeInTheDocument();
-  expect(loader).toHaveAttribute('aria-label', message);
+    render(<GlobalLoader />);
+    const loader = screen.getByRole('status');
+    expect(loader).toBeInTheDocument();
+    expect(loader).toHaveAttribute('aria-label', message);
 
-  // Check that the message is rendered
-  expect(screen.getByText(message)).toBeInTheDocument();
+    // Check that the message is rendered
+    expect(screen.getByText(message)).toBeInTheDocument();
 
-  // Check bouncing dots by class name
-  const bouncingDots = loader.querySelectorAll('.animate-bounce');
-  expect(bouncingDots).toHaveLength(3);
-});
+    // Check bouncing dots by class name
+    const bouncingDots = loader.querySelectorAll('.animate-bounce');
+    expect(bouncingDots).toHaveLength(3);
+  });
 
   it('renders all layers of the loader', () => {
-    (useAppSelector as any).mockImplementation(() => ({
+    mockSelector.mockReturnValue({
       isLoading: true,
       loadingMessage: '',
-    }));
+    });
 
     render(<GlobalLoader />);
     const loader = screen.getByRole('status');

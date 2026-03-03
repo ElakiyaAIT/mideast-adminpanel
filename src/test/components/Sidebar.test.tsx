@@ -1,7 +1,6 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { render, screen, fireEvent, within } from '@testing-library/react';
 import { MemoryRouter } from 'react-router-dom';
-import type { Mock } from 'vitest';
 import { Sidebar } from '../../components/layout';
 
 // --------------------
@@ -18,7 +17,7 @@ const renderSidebar = (initialPath = '/dashboard'): void => {
   render(
     <MemoryRouter initialEntries={[initialPath]}>
       <Sidebar />
-    </MemoryRouter>
+    </MemoryRouter>,
   );
 };
 
@@ -69,23 +68,23 @@ describe('<Sidebar />', () => {
     const toggleButton = screen.getByRole('button', { name: /toggle menu/i });
     fireEvent.click(toggleButton);
 
-const mobileMenu = screen.getByLabelText('Mobile sidebar navigation');
+    const mobileMenu = screen.getByLabelText('Mobile sidebar navigation');
 
-const link = within(mobileMenu).getByText('Auctions').closest('a');
+    const link = within(mobileMenu).getByText('Auctions').closest('a');
     expect(link).toBeInTheDocument();
 
     fireEvent.click(link!);
-expect(mobileMenu).not.toBeInTheDocument();
+    expect(mobileMenu).not.toBeInTheDocument();
     expect(screen.queryByLabelText('Mobile sidebar navigation')).not.toBeInTheDocument();
   });
 
   it('renders mobile header brand correctly', () => {
     renderSidebar();
 
-   const brands = screen.getAllByText('Admin Panel');
-expect(brands.length).toBeGreaterThan(0);
+    const brands = screen.getAllByText('Admin Panel');
+    expect(brands.length).toBeGreaterThan(0);
 
-  const badges = screen.getAllByText('A');
-expect(badges.length).toBeGreaterThan(1); // 
+    const badges = screen.getAllByText('A');
+    expect(badges.length).toBeGreaterThan(1); //
   });
 });
