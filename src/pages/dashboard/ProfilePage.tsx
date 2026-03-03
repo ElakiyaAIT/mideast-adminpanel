@@ -98,18 +98,26 @@ const ProfilePage = (): JSX.Element => {
           <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
             <Input
               label="First Name"
+              data-testid="first-name-input"
               type="text"
               {...register('firstName')}
               error={errors.firstName?.message}
             />
             <Input
               label="Last Name"
+              data-testid="last-name-input"
               type="text"
               {...register('lastName')}
               error={errors.lastName?.message}
             />
           </div>
-          <Input label="Email" type="email" {...register('email')} error={errors.email?.message} />
+          <Input
+            label="Email"
+            data-testid="email-input"
+            type="email"
+            {...register('email')}
+            error={errors.email?.message}
+          />
 
           {displayProfile && (
             <div className="border-t border-white/30 pt-4 dark:border-white/10">

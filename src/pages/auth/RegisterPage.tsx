@@ -59,6 +59,7 @@ const RegisterPage = (): JSX.Element => {
               <div className="grid grid-cols-2 gap-4">
                 <Input
                   label="First name"
+                  data-testid="first-name-input"
                   type="text"
                   {...register('firstName')}
                   error={errors.firstName?.message}
@@ -67,6 +68,7 @@ const RegisterPage = (): JSX.Element => {
                 />
                 <Input
                   label="Last name"
+                  data-testid="last-name-input"
                   type="text"
                   {...register('lastName')}
                   error={errors.lastName?.message}
@@ -76,6 +78,7 @@ const RegisterPage = (): JSX.Element => {
               </div>
               <Input
                 label="Email address"
+                data-testid="emailId-input"
                 type="email"
                 {...register('email')}
                 error={errors.email?.message}
@@ -84,6 +87,7 @@ const RegisterPage = (): JSX.Element => {
               />
               <Input
                 label="Password"
+                data-testid="password-input"
                 type="password"
                 {...register('password')}
                 error={errors.password?.message}

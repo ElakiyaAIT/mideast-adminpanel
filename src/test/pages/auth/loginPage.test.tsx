@@ -48,8 +48,8 @@ describe('LoginPage', () => {
 
     expect(screen.getByText(/welcome back to mideast equipment/i)).toBeInTheDocument();
 
-    expect(screen.getByLabelText(/email/i)).toBeInTheDocument();
-    expect(screen.getByLabelText(/password/i)).toBeInTheDocument();
+    expect(screen.getByTestId('emailId-input')).toBeInTheDocument();
+    expect(screen.getByTestId('password-input')).toBeInTheDocument();
 
     expect(screen.getByRole('button', { name: /sign in/i })).toBeInTheDocument();
   });

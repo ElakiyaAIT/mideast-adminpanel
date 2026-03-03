@@ -50,10 +50,10 @@ describe('RegisterPage', () => {
 
     expect(screen.getByText(/create your account/i)).toBeInTheDocument();
 
-    expect(screen.getByLabelText(/first name/i)).toBeInTheDocument();
-    expect(screen.getByLabelText(/last name/i)).toBeInTheDocument();
-    expect(screen.getByLabelText(/email address/i)).toBeInTheDocument();
-    expect(screen.getByLabelText(/password/i)).toBeInTheDocument();
+    expect(screen.getByTestId('first-name-input')).toBeInTheDocument();
+    expect(screen.getByTestId('last-name-input')).toBeInTheDocument();
+    expect(screen.getByTestId('emailId-input')).toBeInTheDocument();
+    expect(screen.getByTestId('password-input')).toBeInTheDocument();
 
     expect(screen.getByRole('button', { name: /create account/i })).toBeInTheDocument();
   });

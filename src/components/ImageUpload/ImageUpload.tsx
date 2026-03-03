@@ -153,6 +153,7 @@ export const ImageUpload = ({
           onChange={handleFileChange}
           disabled={disabled || !canAddMore}
           className="hidden"
+          data-testId="images-input"
         />
 
         <div className="flex flex-col items-center justify-center gap-3 text-center">

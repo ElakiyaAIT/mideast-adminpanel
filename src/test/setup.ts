@@ -1,7 +1,15 @@
 import '@testing-library/jest-dom';
 import { cleanup } from '@testing-library/react';
 import { afterEach, vi } from 'vitest';
-
+Object.defineProperty(window, 'localStorage', {
+  writable: true,
+  value: {
+    getItem: vi.fn(() => null),
+    setItem: vi.fn(),
+    removeItem: vi.fn(),
+    clear: vi.fn(),
+  },
+});
 // Cleanup after each test
 afterEach(() => {
   cleanup();

@@ -118,6 +118,7 @@ const UserFormModal = ({ isOpen, onClose, user, mode }: UserFormModalProps): JSX
         <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
           <Input
             label="First Name"
+            data-testid="first-name-input"
             type="text"
             placeholder="Enter first name"
             {...register('firstName')}
@@ -126,6 +127,7 @@ const UserFormModal = ({ isOpen, onClose, user, mode }: UserFormModalProps): JSX
           />
           <Input
             label="Last Name"
+            data-testid="last-name-input"
             type="text"
             placeholder="Enter last name"
             {...register('lastName')}
@@ -136,6 +138,7 @@ const UserFormModal = ({ isOpen, onClose, user, mode }: UserFormModalProps): JSX
 
         <Input
           label="Email Address"
+          data-testid="email-input"
           type="email"
           placeholder="Enter email address"
           {...register('email')}
@@ -152,6 +155,7 @@ const UserFormModal = ({ isOpen, onClose, user, mode }: UserFormModalProps): JSX
               options={roleOptions}
               {...field}
               error={errors.roleId?.message}
+              data-testid="roleId-input"
               disabled={isLoadingRoles}
               required
             />

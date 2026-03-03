@@ -80,11 +80,23 @@ export const EquipmentCategoryFormModal = ({
     >
       <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
         {/* Name */}
-        <Input label="Name" {...register('name')} error={errors.name?.message} required />
+        <Input
+          label="Name"
+          {...register('name')}
+          data-testid="name-input"
+          error={errors.name?.message}
+          required
+        />
 
         {/* Slug only in Add mode */}
         {!isEditMode && (
-          <Input label="Slug" {...register('slug')} error={errors.slug?.message} required />
+          <Input
+            label="Slug"
+            {...register('slug')}
+            data-testid="slug-input"
+            error={errors.slug?.message}
+            required
+          />
         )}
 
         {/* Description */}
@@ -97,6 +109,7 @@ export const EquipmentCategoryFormModal = ({
             {...register('description')}
             className="w-full rounded-lg border p-2 dark:border-gray-600 dark:bg-gray-800"
             rows={3}
+            data-testid="description-input"
           />
           {errors.description && (
             <p className="mt-1 text-sm text-red-600 dark:text-red-400">
@@ -110,7 +123,12 @@ export const EquipmentCategoryFormModal = ({
           name="isActive"
           control={control}
           render={({ field: { value, onChange } }) => (
-            <Checkbox label="Active" checked={value} onChange={(e) => onChange(e.target.checked)} />
+            <Checkbox
+              label="Active"
+              data-testid="isActive-input"
+              checked={value}
+              onChange={(e) => onChange(e.target.checked)}
+            />
           )}
         />
 

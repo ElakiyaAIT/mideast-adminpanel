@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState, type JSX } from 'react';
+import { useEffect, useState, type JSX } from 'react';
 import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { Modal, Input, Button, Textarea, ImageUpload } from '../../../components';
@@ -32,8 +32,8 @@ const TestimonialFormModal = ({
   const [existingImage, setExistingImage] = useState<string | null>();
   const [isUploading, setIsUploading] = useState(false);
 
-  const prevOpenRef = useRef(isOpen);
-  const prevIdRef = useRef(testimonial?._id);
+  // const prevOpenRef = useRef(isOpen);
+  // const prevIdRef = useRef(testimonial?._id);
 
   const {
     register,
@@ -51,39 +51,28 @@ const TestimonialFormModal = ({
   });
 
   useEffect(() => {
-    const justOpened = isOpen && !prevOpenRef.current;
-    const testimonialChanged = testimonial?._id !== prevIdRef.current;
+    // Only reset when modal is open
+    if (!isOpen) return;
 
-    if (justOpened || testimonialChanged) {
+    // In edit mode with a testimonial
+    const initializeForm = () => {
       if (mode === 'edit' && testimonial) {
         reset({
           name: testimonial.name,
           role: testimonial.role || '',
           review: testimonial.review,
         });
-
-        setTimeout(() => {
-          setExistingImage(testimonial.image);
-          setImageFile(null);
-        }, 0);
-      } else {
-        reset({
-          name: '',
-          role: '',
-          review: '',
-        });
-
-        setTimeout(() => {
-          setExistingImage(undefined);
-          setImageFile(null);
-        }, 0);
+        setExistingImage(testimonial.image);
+        setImageFile(null);
+      } else if (mode === 'create') {
+        reset({ name: '', role: '', review: '' });
+        setExistingImage(null);
+        setImageFile(null);
       }
-    }
-
-    prevOpenRef.current = isOpen;
-    prevIdRef.current = testimonial?._id;
-  }, [isOpen, testimonial, mode, reset]);
-
+    };
+    const timeout = setTimeout(initializeForm, 0);
+    return () => clearTimeout(timeout);
+  }, [isOpen, mode, testimonial, reset]);
   const handleImageChange = (files: File[]): void => {
     setImageFile(files[0] || null);
   };
@@ -138,13 +127,20 @@ const TestimonialFormModal = ({
     >
       <form onSubmit={handleSubmit(onSubmit)} className="max-h-[70vh] space-y-4 overflow-y-auto">
         {/* Basic Info */}
-        <Input label="Client Name" {...register('name')} error={errors.name?.message} required />
+        <Input
+          label="Client Name"
+          data-testid="name-input"
+          {...register('name')}
+          error={errors.name?.message}
+          required
+        />
 
         <Input
           label="Designation"
           {...register('role')}
           error={errors.role?.message}
           placeholder="e.g., CEO"
+          data-testid="designation-input"
         />
 
         <Textarea
@@ -152,6 +148,7 @@ const TestimonialFormModal = ({
           {...register('review')}
           error={errors.review?.message}
           required
+          data-testid="review-input"
         />
 
         {/* Image Upload */}

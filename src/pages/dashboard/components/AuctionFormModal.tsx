@@ -186,6 +186,7 @@ const AuctionFormModal = ({
             {...register('title')}
             error={errors.title?.message}
             placeholder="e.g., Spring Heavy Equipment Auction"
+            data-testid="title-input"
             required
           />
 
@@ -194,6 +195,7 @@ const AuctionFormModal = ({
             {...register('description')}
             error={errors.description?.message}
             placeholder="Detailed description of the auction..."
+            data-testid="description-input"
             required
           />
           <ImageUpload
@@ -233,6 +235,7 @@ const AuctionFormModal = ({
               type="datetime-local"
               {...register('startDate')}
               error={errors.startDate?.message}
+              data-testId="startDate-input"
               required
             />
 
@@ -241,6 +244,7 @@ const AuctionFormModal = ({
               type="datetime-local"
               {...register('endDate')}
               error={errors.endDate?.message}
+              data-testId="endDate-input"
               required
             />
           </div>
@@ -258,12 +262,25 @@ const AuctionFormModal = ({
             {...register('address')}
             error={errors.address?.message}
             placeholder="Street address"
+            data-testid="address-input"
           />
 
           <div className="grid grid-cols-2 gap-4">
-            <Input label="City" type="text" {...register('city')} error={errors.city?.message} />
+            <Input
+              label="City"
+              type="text"
+              data-testid="city-input"
+              {...register('city')}
+              error={errors.city?.message}
+            />
 
-            <Input label="State" type="text" {...register('state')} error={errors.state?.message} />
+            <Input
+              label="State"
+              type="text"
+              data-testid="state-input"
+              {...register('state')}
+              error={errors.state?.message}
+            />
           </div>
         </div>
 

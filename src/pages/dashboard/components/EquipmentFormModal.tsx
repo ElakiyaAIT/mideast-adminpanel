@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState, type JSX } from 'react';
+import { useEffect, useState, type JSX } from 'react';
 import { useForm, Controller, useWatch } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { Modal, Input, Button, Select, Textarea, ImageUpload } from '../../../components';
@@ -37,8 +37,8 @@ const EquipmentFormModal = ({
   const categories = categoriesData?.items || [];
   const sellers = usersData?.items || [];
 
-  const prevOpenRef = useRef(isOpen);
-  const prevEquipmentIdRef = useRef(equipment?._id);
+  // const prevOpenRef = useRef(isOpen);
+  // const prevEquipmentIdRef = useRef(equipment?._id);
 
   // Image upload state
   const [imageFiles, setImageFiles] = useState<File[]>([]);
@@ -84,59 +84,58 @@ const EquipmentFormModal = ({
   });
 
   useEffect(() => {
-    const justOpened = isOpen && !prevOpenRef.current;
-    const equipmentChanged = equipment?._id !== prevEquipmentIdRef.current;
+    // const justOpened = isOpen && !prevOpenRef.current;
+    // const equipmentChanged = equipment?._id !== prevEquipmentIdRef.current;
 
-    if (justOpened || equipmentChanged) {
-      if (mode === 'edit' && equipment) {
-        reset({
-          title: equipment.title,
-          description: equipment.description,
-          categoryId: equipment?.categoryId?._id as string,
-          sellerId: equipment.sellerId?._id as string,
-          listingType: equipment.listingType,
-          buyNowPrice: equipment.buyNowPrice || undefined,
-          reservePrice: equipment.reservePrice || undefined,
-          make: equipment.make,
-          models: equipment.models,
-          year: equipment.year,
-          serialNumber: equipment.serialNumber || '',
-          hoursUsed: equipment.hoursUsed || undefined,
-          condition: equipment.condition as Condition,
-          location: equipment.location,
-        });
-        setExistingImages(equipment.images || []);
-        setImageFiles([]);
-      } else {
-        reset({
-          title: '',
-          description: '',
-          categoryId: '',
-          sellerId: '',
-          listingType: ListingTypeType.BUY_NOW,
-          buyNowPrice: undefined,
-          reservePrice: undefined,
-          make: '',
-          models: '',
-          year: new Date().getFullYear(),
-          serialNumber: '',
-          hoursUsed: undefined,
-          condition: ConditionType.NEW,
-          location: {
-            address: '',
-            city: '',
-            state: '',
-            zipCode: '',
-            country: 'USA',
-          },
-        });
-        setExistingImages([]);
-        setImageFiles([]);
-      }
+    // if (justOpened || equipmentChanged) {
+    if (mode === 'edit' && equipment) {
+      reset({
+        title: equipment.title,
+        description: equipment.description,
+        categoryId: equipment?.categoryId?._id as string,
+        sellerId: equipment.sellerId?._id as string,
+        listingType: equipment.listingType,
+        buyNowPrice: equipment.buyNowPrice || undefined,
+        reservePrice: equipment.reservePrice || undefined,
+        make: equipment.make,
+        models: equipment.models,
+        year: equipment.year,
+        serialNumber: equipment.serialNumber || '',
+        hoursUsed: equipment.hoursUsed || undefined,
+        condition: equipment.condition as Condition,
+        location: equipment.location,
+      });
+      setExistingImages(equipment.images || []);
+      setImageFiles([]);
+    } else {
+      reset({
+        title: '',
+        description: '',
+        categoryId: '',
+        sellerId: '',
+        listingType: ListingTypeType.BUY_NOW,
+        buyNowPrice: undefined,
+        reservePrice: undefined,
+        make: '',
+        models: '',
+        year: new Date().getFullYear(),
+        serialNumber: '',
+        hoursUsed: undefined,
+        condition: ConditionType.NEW,
+        location: {
+          address: '',
+          city: '',
+          state: '',
+          zipCode: '',
+          country: 'USA',
+        },
+      });
+      setExistingImages([]);
+      setImageFiles([]);
     }
 
-    prevOpenRef.current = isOpen;
-    prevEquipmentIdRef.current = equipment?._id;
+    // prevOpenRef.current = isOpen;
+    // prevEquipmentIdRef.current = equipment?._id;
   }, [mode, equipment, isOpen, reset]);
 
   const onSubmit = async (data: EquipmentFormData): Promise<void> => {
@@ -228,6 +227,7 @@ const EquipmentFormModal = ({
             error={errors.title?.message}
             placeholder="e.g., 2019 John Deere 644K Wheel Loader"
             required
+            data-testid="title-input"
           />
 
           <Textarea
@@ -236,6 +236,7 @@ const EquipmentFormModal = ({
             error={errors.description?.message}
             placeholder="Detailed description of the equipment..."
             required
+            data-testid="description-input"
           />
 
           <div className="grid grid-cols-2 gap-4">
@@ -252,6 +253,7 @@ const EquipmentFormModal = ({
                     label: cat.name,
                   }))}
                   required
+                  data-testid="categoryId-input"
                 />
               )}
             />
@@ -270,6 +272,7 @@ const EquipmentFormModal = ({
                       label: `${seller.firstName} ${seller.lastName} (${seller.email})`,
                     }))}
                     required
+                    data-testid="sellerId-input"
                   />
                 )}
               />
@@ -289,6 +292,7 @@ const EquipmentFormModal = ({
               error={errors.make?.message}
               placeholder="e.g., John Deere"
               required
+              data-testid="make-input"
             />
 
             <Input
@@ -298,6 +302,7 @@ const EquipmentFormModal = ({
               error={errors.models?.message}
               placeholder="e.g., 644K"
               required
+              data-testid="models-input"
             />
 
             <Input
@@ -306,6 +311,7 @@ const EquipmentFormModal = ({
               {...register('year', { valueAsNumber: true })}
               error={errors.year?.message}
               placeholder="e.g., 2019"
+              data-testid="year-input"
             />
 
             <Input
@@ -314,6 +320,7 @@ const EquipmentFormModal = ({
               {...register('serialNumber')}
               error={errors.serialNumber?.message}
               placeholder="Optional"
+              data-testid="serial-input"
             />
 
             <Input
@@ -323,6 +330,7 @@ const EquipmentFormModal = ({
               error={errors.hoursUsed?.message}
               placeholder="e.g., 1250"
               required
+              data-testid="hours-input"
             />
 
             <Controller
@@ -338,6 +346,7 @@ const EquipmentFormModal = ({
                     label: type.replace(/_/g, ' ').toUpperCase(),
                   }))}
                   required
+                  data-testid="condition-input"
                 />
               )}
             />
@@ -362,6 +371,7 @@ const EquipmentFormModal = ({
                     label: type.replace(/_/g, ' ').toUpperCase(),
                   }))}
                   required
+                  data-testid="listing-input"
                 />
               )}
             />
@@ -373,6 +383,7 @@ const EquipmentFormModal = ({
               error={errors.buyNowPrice?.message}
               placeholder="e.g., 125000"
               required
+              data-testid="buynow-input"
             />
 
             {listingType !== ListingTypeType.BUY_NOW && (
@@ -382,6 +393,7 @@ const EquipmentFormModal = ({
                 {...register('reservePrice', { valueAsNumber: true })}
                 error={errors.reservePrice?.message}
                 placeholder="e.g., 100000"
+                data-testid="reservePrice"
               />
             )}
           </div>
@@ -398,6 +410,7 @@ const EquipmentFormModal = ({
             error={errors.location?.address?.message}
             placeholder="Street address"
             required
+            data-testid="address-input"
           />
 
           <div className="grid grid-cols-2 gap-4">
@@ -407,6 +420,7 @@ const EquipmentFormModal = ({
               {...register('location.city')}
               error={errors.location?.city?.message}
               required
+              data-testid="city-input"
             />
 
             <Input
@@ -415,6 +429,7 @@ const EquipmentFormModal = ({
               {...register('location.state')}
               error={errors.location?.state?.message}
               required
+              data-testid="state-input"
             />
 
             <Input
@@ -423,6 +438,7 @@ const EquipmentFormModal = ({
               type="text"
               {...register('location.zipCode')}
               error={errors.location?.zipCode?.message}
+              data-testid="zipcode-input"
             />
 
             <Input
@@ -430,6 +446,7 @@ const EquipmentFormModal = ({
               type="text"
               {...register('location.country')}
               error={errors.location?.country?.message}
+              data-testid="country-input"
             />
           </div>
         </div>

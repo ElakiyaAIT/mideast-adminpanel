@@ -39,6 +39,7 @@ export const Skeleton = ({
     <div
       className={cn(baseStyles, variantStyles[variant], animationStyles[animation], className)}
       style={style}
+      data-testid="skeleton"
       aria-busy="true"
       aria-label="Loading content"
     />
