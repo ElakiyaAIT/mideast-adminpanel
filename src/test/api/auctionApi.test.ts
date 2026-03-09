@@ -133,6 +133,8 @@ describe('auctionApi', () => {
       success: true,
       message: 'Equipment fetched successfully',
       data: mockEquipment,
+      timestamp: '',
+      path: '',
     };
     mockedAxios.get.mockResolvedValue({ data: mockResponse });
 
@@ -165,6 +167,8 @@ describe('auctionApi', () => {
       success: true,
       message: 'Bids fetched successfully',
       data: [mockBid],
+      timestamp: '',
+      path: '',
     };
     mockedAxios.get.mockResolvedValue({ data: mockResponse });
 
@@ -179,6 +183,8 @@ describe('auctionApi', () => {
       success: true,
       message: 'Auction created successfully',
       data: { ...mockAuction, ...createAuctionPayload, _id: '2' },
+      timestamp: '',
+      path: '',
     };
     mockedAxios.post.mockResolvedValue({ data: mockResponse });
 
@@ -197,6 +203,8 @@ describe('auctionApi', () => {
       success: true,
       message: 'Images uploaded successfully',
       data: { urls: ['url1', 'url2'] },
+      timestamp: '',
+      path: '',
     };
     mockedAxios.post.mockResolvedValue({ data: mockResponse });
 
@@ -217,6 +225,8 @@ describe('auctionApi', () => {
       success: true,
       message: 'Auction updated successfully',
       data: { ...mockAuction, ...updateAuctionPayload },
+      timestamp: '',
+      path: '',
     };
     mockedAxios.patch.mockResolvedValue({ data: mockResponse });
 
@@ -231,6 +241,8 @@ describe('auctionApi', () => {
       success: true,
       message: 'Equipment assigned successfully',
       data: { assigned: 1 },
+      timestamp: '',
+      path: '',
     };
 
     mockedAxios.post.mockResolvedValue({ data: mockResponse });
@@ -249,6 +261,8 @@ describe('auctionApi', () => {
       success: true,
       message: 'Auction cancelled successfully',
       data: { ...mockAuction, status: 'cancelled' },
+      timestamp: '',
+      path: '',
     };
     mockedAxios.post.mockResolvedValue({ data: mockResponse });
 
@@ -263,6 +277,8 @@ describe('auctionApi', () => {
       success: true,
       message: 'Auction deleted successfully',
       data: undefined,
+      timestamp: '',
+      path: '',
     };
     mockedAxios.delete.mockResolvedValue({ data: mockResponse });
 
@@ -298,6 +314,8 @@ describe('auctionApi', () => {
       success: true,
       message: 'Auction updated successfully',
       data: { ...mockAuction, ...partialUpdatePayload },
+      timestamp: '',
+      path: '',
     };
     mockedAxios.patch.mockResolvedValue({ data: mockResponse });
 
@@ -345,6 +363,8 @@ describe('auctionApi', () => {
       success: true,
       message: 'Equipment assigned successfully',
       data: { assigned: 3 },
+      timestamp: '',
+      path: '',
     };
     mockedAxios.post.mockResolvedValue({ data: mockResponse });
 
@@ -363,6 +383,8 @@ describe('auctionApi', () => {
       success: true,
       message: 'Image uploaded successfully',
       data: { urls: ['url1'] },
+      timestamp: '',
+      path: '',
     };
     mockedAxios.post.mockResolvedValue({ data: mockResponse });
 
@@ -400,6 +422,8 @@ describe('auctionApi', () => {
       success: true,
       message: 'Bids fetched successfully',
       data: [mockBid],
+      timestamp: '',
+      path: '',
     };
     mockedAxios.get.mockResolvedValue({ data: mockResponse });
 

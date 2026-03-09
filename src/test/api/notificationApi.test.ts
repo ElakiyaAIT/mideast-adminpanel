@@ -46,6 +46,8 @@ const createApiResponse = <T>(data: T): ApiResponse<T> => ({
   success: true,
   message: '',
   data,
+  timestamp: '',
+  path: '',
 });
 describe('notificationApi', () => {
   beforeEach(() => {

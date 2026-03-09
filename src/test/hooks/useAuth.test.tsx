@@ -226,6 +226,8 @@ describe('useAuth hooks', () => {
           },
           message: 'Login failed',
         },
+        timestamp: '',
+        path: '',
       };
 
       vi.mocked(authApi.login).mockResolvedValue(mockResponse);
@@ -274,6 +276,8 @@ describe('useAuth hooks', () => {
         success: true,
         message: 'Success',
         data: { message: 'success', user: mockUser },
+        timestamp: '',
+        path: '',
       };
 
       vi.mocked(authApi.register).mockResolvedValue(mockResponse);
@@ -430,6 +434,8 @@ describe('useAuth hooks', () => {
         success: true,
         message: 'Success',
         data: { message: 'Password reset successfully' },
+        timestamp: '',
+        path: '',
       };
 
       vi.mocked(authApi.resetPassword).mockResolvedValue(mockResponse);

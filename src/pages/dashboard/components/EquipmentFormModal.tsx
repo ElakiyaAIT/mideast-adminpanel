@@ -82,6 +82,7 @@ const EquipmentFormModal = ({
     control,
     name: 'listingType',
   });
+  const stripHtml = (html: string) => html.replace(/<[^>]*>/g, '');
 
   useEffect(() => {
     // const justOpened = isOpen && !prevOpenRef.current;
@@ -91,7 +92,7 @@ const EquipmentFormModal = ({
     if (mode === 'edit' && equipment) {
       reset({
         title: equipment.title,
-        description: equipment.description,
+        description: stripHtml(equipment.description),
         categoryId: equipment?.categoryId?._id as string,
         sellerId: equipment.sellerId?._id as string,
         listingType: equipment.listingType,

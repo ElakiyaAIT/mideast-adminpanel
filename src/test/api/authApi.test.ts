@@ -41,6 +41,8 @@ describe('authApi', () => {
       data: { user: mockUser, message: 'Login successful' },
       success: true,
       message: 'Success',
+      timestamp: '',
+      path: '',
     };
 
     mockedAxios.post.mockResolvedValueOnce({ data: mockResponse });
@@ -62,6 +64,8 @@ describe('authApi', () => {
       data: { user: mockUser, message: 'Registration successful' },
       success: true,
       message: 'Success',
+      timestamp: '',
+      path: '',
     };
 
     mockedAxios.post.mockResolvedValueOnce({ data: mockResponse });
@@ -77,6 +81,8 @@ describe('authApi', () => {
       data: { message: 'Logged out' },
       success: true,
       message: 'Success',
+      timestamp: '',
+      path: '',
     };
 
     mockedAxios.post.mockResolvedValueOnce({ data: mockResponse });
@@ -92,6 +98,8 @@ describe('authApi', () => {
       data: { message: 'Token refreshed successfully' },
       success: true,
       message: 'Success',
+      timestamp: '',
+      path: '',
     };
 
     mockedAxios.post.mockResolvedValueOnce({ data: mockResponse });
@@ -107,6 +115,8 @@ describe('authApi', () => {
       data: mockUser,
       success: true,
       message: 'Success',
+      timestamp: '',
+      path: '',
     };
 
     mockedAxios.get.mockResolvedValueOnce({ data: mockResponse });
@@ -123,6 +133,8 @@ describe('authApi', () => {
       data: { message: 'Reset email sent' },
       success: true,
       message: 'Success',
+      timestamp: '',
+      path: '',
     };
 
     mockedAxios.post.mockResolvedValueOnce({ data: mockResponse });
@@ -139,6 +151,8 @@ describe('authApi', () => {
       data: { user: mockUser, message: 'Google sign-in successful' },
       success: true,
       message: 'Success',
+      timestamp: '',
+      path: '',
     };
 
     mockedAxios.post.mockResolvedValueOnce({ data: mockResponse });
@@ -158,6 +172,8 @@ describe('authApi', () => {
       data: { message: 'Password reset successful' },
       success: true,
       message: 'Success',
+      timestamp: '',
+      path: '',
     };
 
     mockedAxios.post.mockResolvedValueOnce({ data: mockResponse });

@@ -76,6 +76,8 @@ describe('useNotifications', () => {
     data: mockPaginatedResponse,
     success: true,
     message: 'Fetched successfully',
+    timestamp: '',
+    path: '',
   };
   it('should fetch notifications successfully', async () => {
     vi.mocked(notificationApi.getNotifications).mockResolvedValue(mockApiResponse);
