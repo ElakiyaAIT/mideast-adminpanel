@@ -20,7 +20,11 @@ const RegisterPage = (): JSX.Element => {
   });
 
   const onSubmit = async (data: RegisterFormData): Promise<void> => {
-    registerMutation.mutate(data);
+    const payload = {
+      ...data,
+      isActive: true,
+    };
+    registerMutation.mutate(payload);
   };
 
   return (

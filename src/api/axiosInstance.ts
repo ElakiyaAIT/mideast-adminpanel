@@ -46,7 +46,12 @@ const processQueue = (error: AxiosError | null): void => {
 
 const shouldSkipRefresh = (url: string | undefined): boolean => {
   if (!url) return true;
-  const skipPaths = ['/auth/logout', '/auth/refresh', '/auth/login', '/auth/register'];
+  const skipPaths = [
+    '/auth/admin-logout',
+    '/auth/admin-refresh',
+    '/auth/admin-login',
+    '/auth/register',
+  ];
   return skipPaths.some((path) => url.includes(path));
 };
 
@@ -131,7 +136,7 @@ axiosInstance.interceptors.response.use(
       refreshAttempts += 1;
 
       refreshPromise = axiosInstance
-        .post<ApiResponse<unknown>>('/auth/refresh', {}, {
+        .post<ApiResponse<unknown>>('/auth/admin-refresh', {}, {
           _skipRefresh: true,
         } as CustomAxiosRequestConfig)
         .then((response) => {

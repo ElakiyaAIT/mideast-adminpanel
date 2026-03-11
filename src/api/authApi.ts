@@ -29,20 +29,20 @@ export const authApi = {
   },
 
   logout: async (): Promise<ApiResponse<LogoutResponseDto>> => {
-    const response = await axiosInstance.post<ApiResponse<LogoutResponseDto>>('/auth/logout');
+    const response = await axiosInstance.post<ApiResponse<LogoutResponseDto>>('/auth/admin-logout');
     return response.data;
   },
 
   refreshToken: async (): Promise<ApiResponse<RefreshTokenResponseDto>> => {
     const response = await axiosInstance.post<ApiResponse<RefreshTokenResponseDto>>(
-      '/auth/refresh',
+      '/auth/admin-refresh',
       {},
     );
     return response.data;
   },
 
   getCurrentUser: async (): Promise<ApiResponse<UserProfileDto>> => {
-    const response = await axiosInstance.get<ApiResponse<UserProfileDto>>('/auth/profile');
+    const response = await axiosInstance.get<ApiResponse<UserProfileDto>>('/auth/admin-profile');
     return response.data;
   },
 

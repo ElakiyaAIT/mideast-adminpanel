@@ -13,7 +13,7 @@ import type { ApiResponse } from '../dto';
 
 export const userApi = {
   getProfile: async (): Promise<ApiResponse<UserProfileDto>> => {
-    const response = await axiosInstance.get<ApiResponse<UserProfileDto>>('/auth/profile');
+    const response = await axiosInstance.get<ApiResponse<UserProfileDto>>('/auth/admin-profile');
     return response.data;
   },
 
@@ -21,7 +21,7 @@ export const userApi = {
     data: UpdateUserProfileDto,
   ): Promise<ApiResponse<UpdateUserProfileResponseDto>> => {
     const response = await axiosInstance.patch<ApiResponse<UpdateUserProfileResponseDto>>(
-      '/auth/profile',
+      '/auth/admin-profile',
       data,
     );
     return response.data;
